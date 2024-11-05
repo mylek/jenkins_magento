@@ -1,5 +1,5 @@
 pipeline {
-    agent any
+    agent { dockerfile true }
     
     parameters {
         choice(choices: ["develop", "staging"], description: "Set enviroment", name: "enviroment")
