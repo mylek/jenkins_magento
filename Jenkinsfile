@@ -1,5 +1,5 @@
 pipeline {
-    agent { dockerfile true }
+    agent any
     
     parameters {
         choice(choices: ["develop", "staging"], description: "Set enviroment", name: "enviroment")
@@ -19,7 +19,13 @@ pipeline {
         }
         stage("Tool Setup") {
             steps {
+                agent {
+                    dockerfile {
+                        filename 'Dockerfile'
+                    }
+                }
                 echo "Tool Setup";
+                sh "php -v"
             }
         }
         stage("Magento Setup") {
