@@ -1,5 +1,7 @@
 pipeline {
-    agent any
+    agent {
+        dockerfile true
+    }
     
     parameters {
         choice(choices: ["develop", "staging"], description: "Set enviroment", name: "enviroment")
@@ -18,12 +20,6 @@ pipeline {
             }
         }
         stage("Tool Setup") {
-            agent {
-                dockerfile {
-                    filename 'Dockerfile'
-                    dir 'docker/'
-                }
-            }
             steps {
                 echo "Tool Setup";
                 sh "php -v"
