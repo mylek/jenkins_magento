@@ -22,7 +22,6 @@ pipeline {
                 dockerfile {
                     filename 'Dockerfile'
                     dir 'docker/'
-                    label 'main'
                 }
             }
             steps {
