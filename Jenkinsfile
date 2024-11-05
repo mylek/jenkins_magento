@@ -18,12 +18,12 @@ pipeline {
             }
         }
         stage("Tool Setup") {
-            steps {
-                agent {
-                    dockerfile {
-                        filename 'Dockerfile'
-                    }
+            agent {
+                dockerfile {
+                    filename 'Dockerfile'
                 }
+            }
+            steps {
                 echo "Tool Setup";
                 sh "php -v"
             }
