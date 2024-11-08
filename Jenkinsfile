@@ -55,6 +55,7 @@ pipeline {
                     echo "${rootDir}/auth.json"
                     sh "ln -s env/auth.json ${rootDir}/auth.json"
                     sh "ls ${rootDir}"
+                    sh "cat ${rootDir}/auth.json"
                     
                     dir("${rootDir}") {
                         sh "git fetch origin"
