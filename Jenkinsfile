@@ -2,6 +2,10 @@ pipeline {
     agent {
         dockerfile true
     }
+
+    environment {
+        FOO = "sh"
+    }
     
     parameters {
         choice(choices: ["develop", "staging"], description: "Set enviroment", name: "enviroment")
@@ -24,8 +28,9 @@ pipeline {
                 script {
                     // Phing
                     if (!fileExists('phing-latest.phar')) {
-                        sh "curl -sS -O https://www.phing.info/get/phing-latest.phar"
+                        sh "curl -sS https://www.phing.info/get/phing-latest.phar -o /bin"
                     }
+                    sh "ls /bin"
                     sh "php /var/jenkins_home/workspace/Magento/phing-latest.phar -v"
                 }
             }
@@ -37,8 +42,6 @@ pipeline {
                     if (!fileExists('shop')) {
                         sh "git clone https://github.com/mylek/magento-module-test.git --branch=${params.tag} shop &> /dev/null"
                     }
-                    sh "ls shop"
-                    sh "ls"
                     dir('shop') {
                         sh "ls"
                         sh "php /var/jenkins_home/workspace/Magento/phing-latest.phar jenkins:flush-all"
