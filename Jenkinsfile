@@ -22,6 +22,7 @@ pipeline {
         stage("Tool Setup") {
             steps {
                 echo "Tool Setup";
+                git clone https://github.com/mylek/magento-module-test.git test
                 sh "php -v"
             }
         }
