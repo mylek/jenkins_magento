@@ -24,9 +24,10 @@ pipeline {
                 script {
                     // Phing
                     if (!fileExists('phing-latest.phar')) {
-                        sh "curl -sS -O https://www.phing.info/get/phing-latest.phar"
+                        sh "curl -sS -O https://www.phing.info/get/phing-latest.phar -o /bin"
                     }
-                    sh "php phing-latest.phar -v"
+                    sh "ls /bin"
+                    sh "php /bin/phing-latest.phar -v"
                 }
             }
         }
