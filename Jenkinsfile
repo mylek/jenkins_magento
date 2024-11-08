@@ -53,6 +53,7 @@ pipeline {
                     
                     sh "rm -rf ${rootDir}/auth.json"
                     echo "${rootDir}/auth.json"
+                    sh "ls ${rootDir}"
                     sh "ln -s env/auth.json ${rootDir}/auth.json"
                     
                     dir("${rootDir}") {
