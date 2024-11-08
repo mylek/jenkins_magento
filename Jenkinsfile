@@ -74,6 +74,7 @@ pipeline {
                     sh "tar -cvf pub_static.tar.gz ${rootDir}/pub/static"
                     sh "rm -rf ${rootDir}/pub/static"
                     sh "tar -cvf shop.tar.gz ${rootDir}"
+                    sh "ls"
                 }
             }
         }
