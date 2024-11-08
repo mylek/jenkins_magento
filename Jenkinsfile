@@ -26,9 +26,7 @@ pipeline {
                     if (!fileExists('phing-latest.phar')) {
                         sh "curl -sS -O https://www.phing.info/get/phing-latest.phar"
                     }
-                    sh "ls"
                     sh "php phing-latest.phar -v"
-                    sh "printenv"
                 }
             }
         }
@@ -41,9 +39,9 @@ pipeline {
                     }
                     sh "ls shop"
                     dir('shop') {
-                        sh "${phingCall} jenkins:flush-all"
-                        sh "${phingCall} jenkins:setup-project"
-                        sh "${phingCall} jenkins:flush-all"
+                        sh "php phing-latest.phar jenkins:flush-all"
+                        sh "php phing-latest.phar jenkins:setup-project"
+                        sh "php phing-latest.phar jenkins:flush-all"
                     }
                     sh "ls shop"
                 }
