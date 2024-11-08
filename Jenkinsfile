@@ -28,10 +28,9 @@ pipeline {
                 script {
                     // Phing
                     if (!fileExists('phing-latest.phar')) {
-                        sh "cd /bin"
-                        sh "curl -sS https://www.phing.info/get/phing-latest.phar"
+                        sh "curl -sS https://www.phing.info/get/phing-latest.phar ./run/"
                     }
-                    sh "ls /bin"
+                    sh "ls ./run"
                     sh "php /var/jenkins_home/workspace/Magento/phing-latest.phar -v"
                 }
             }
