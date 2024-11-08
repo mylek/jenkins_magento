@@ -10,7 +10,7 @@ pipeline {
     
     parameters {
         choice(choices: ["develop", "staging"], description: "Set enviroment", name: "enviroment")
-        string(defaultValue: "1.0.0-RC1", description: "Set git Tag", name: "tag")
+        string(defaultValue: "1.0.0-RC5", description: "Set git Tag", name: "tag")
         string(defaultValue: "https://github.com/mylek/m24.git", description: "Repo URL", name: "repoURL")
     }
     
@@ -54,6 +54,11 @@ pipeline {
                         sh "rm -rf generated/code/*"
                         sh "composer install --no-dev"
                         sh "php bin/magento setup:upgrade"
+                        sh "php bin/magento setup:di:compile"
+                        sh "php bin/magento setup:static-content:deploy"
+                        sh "php bin/magento cache:flush"
+                        sh "php bin/magento maintenance:disable"
+                        sh "php bin/magento cache:enable"
                     }
                     sh "ls shop"
                 }
