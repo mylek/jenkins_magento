@@ -26,6 +26,7 @@ pipeline {
                     if (!fileExists('shop')) {
                         sh "git clone https://github.com/mylek/magento-module-test.git shop"
                     }
+                    sh "ls shop"
                     sh "git fetch origin"
                     sh "git checkout ${params.tag}"
                     sh "ls shop"
