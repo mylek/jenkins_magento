@@ -4,7 +4,7 @@ pipeline {
     }
 
     environment {
-        FOO = "sh"
+        phingCall = "php /var/jenkins_home/workspace/Magento/phing-latest.phar"
     }
     
     parameters {
@@ -28,10 +28,9 @@ pipeline {
                 script {
                     // Phing
                     if (!fileExists('phing-latest.phar')) {
-                        sh "curl -sS https://www.phing.info/get/phing-latest.phar --output /run/phing-latest.phar"
+                        sh "curl -sS https://www.phing.info/get/phing-latest.phar"
                     }
-                    sh "ls /run"
-                    sh "php /var/jenkins_home/workspace/Magento/phing-latest.phar -v"
+                    sh "${phingCall} -v"
                 }
             }
         }
@@ -44,9 +43,9 @@ pipeline {
                     }
                     dir('shop') {
                         sh "ls"
-                        sh "php /var/jenkins_home/workspace/Magento/phing-latest.phar jenkins:flush-all"
-                        sh "php /phing-latest.phar jenkins:setup-project"
-                        sh "php /phing-latest.phar jenkins:flush-all"
+                        sh "${phingCall} jenkins:flush-all"
+                        sh "${phingCall} jenkins:setup-project"
+                        sh "${phingCall} jenkins:flush-all"
                     }
                     sh "ls shop"
                 }
