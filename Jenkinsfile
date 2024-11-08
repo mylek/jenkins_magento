@@ -24,7 +24,7 @@ pipeline {
                 script {
                     echo "Tool Setup";
                     if (!fileExists('shop')) {
-                        sh "git clone https://github.com/mylek/magento-module-test.git shop"
+                        sh "git clone --depth 1 --branch ${params.tag} git clone https://github.com/mylek/magento-module-test.git shop"
                     } else {
                         dir('shop') {
                             sh "git fetch origin"
@@ -49,6 +49,11 @@ pipeline {
         stage("Deployment") {
             steps {
                 echo "Deployment enviroment ${params.enviroment} tag: ${params.tag}";
+            }
+        }
+        stage("Clear up") {
+            steps {
+                sh "rm -fr shop"
             }
         }
     }
