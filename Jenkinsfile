@@ -44,7 +44,6 @@ pipeline {
                         //sh "git clone ${params.repoURL} --branch=${params.tag} shop &> /dev/null"
                     }
                     dir('shop') {
-                        sh "cat composer.json"
                         sh "composer install --no-dev"
                     }
                     sh "ls shop"
