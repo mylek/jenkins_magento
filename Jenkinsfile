@@ -24,7 +24,7 @@ pipeline {
                 script {
                     echo "Tool Setup";
                     if (!fileExists('shop')) {
-                        git --version
+                        git -v
                         sh "git --version"
                         sh "git clone https://github.com/mylek/magento-module-test.git shop"
                     } else {
