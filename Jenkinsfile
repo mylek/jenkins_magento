@@ -4,8 +4,6 @@ pipeline {
     }
 
     environment {
-        phingFile = "/var/jenkins_home/workspace/Magento/phing-latest.phar"
-        phingCall = "php ${phingFile}"
         rootDir = "shop"
     }
     
@@ -24,16 +22,6 @@ pipeline {
                         currentBuild.result = 'ABORTED'
                         error('Tag not set')
                     }
-                }
-            }
-        }
-        stage("Tool Setup") {
-            steps {
-                script {
-                    if (!fileExists("${phingFile}")) {
-                        sh "curl -sS https://www.phing.info/get/phing-latest.phar"
-                    }
-                    sh "${phingCall} -v"
                 }
             }
         }
@@ -71,17 +59,22 @@ pipeline {
                         sh "php bin/magento setup:static-content:deploy"
                         sh "php bin/magento cache:flush"
                         sh "php bin/magento maintenance:enable"
-                        sh "php bin/magento setup:upgrade --keep-generated"
+                        //sh "php bin/magento setup:upgrade --keep-generated"
                         sh "php bin/magento maintenance:disable"
                         sh "php bin/magento cache:enable"
                     }
-                    sh "ls shop"
                 }
             }
         }
         stage("Asset Generation") {
             steps {
-                echo "Asset Generation";
+                script {
+                    sh "tar -cvf var_generation.tar.gz ${rootDir}/generated"
+                    sh "rm -rf ${rootDir}/generated"
+                    sh "tar -cvf pub_static.tar.gz ${rootDir}/pub/static"
+                    sh "rm -rf ${rootDir}/pub/static"
+                    sh "tar -cvf shop.tar.gz ${rootDir}"
+                }
             }
         }
         stage("Deployment") {
