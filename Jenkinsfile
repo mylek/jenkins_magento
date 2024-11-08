@@ -25,7 +25,6 @@ pipeline {
                     echo "Tool Setup";
                     if (!fileExists('shop')) {
                         sh "git clone https://github.com/mylek/magento-module-test.git shop"
-                        sh "ls shop"
                     } else {
                         dir('shop') {
                             sh "git fetch origin"
@@ -33,6 +32,7 @@ pipeline {
                             sh "git reset --hard origin/${params.tag}"
                         }
                     }
+                    sh "ls shop"
                     sh "php -v"
                 }
             }
