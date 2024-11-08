@@ -11,7 +11,7 @@ pipeline {
     
     parameters {
         choice(choices: ["develop", "staging"], description: "Set enviroment", name: "enviroment")
-        string(defaultValue: "1.0.0-RC5", description: "Set git Tag", name: "tag")
+        string(defaultValue: "1.0.0-RC6", description: "Set git Tag", name: "tag")
         string(defaultValue: "https://github.com/mylek/m24.git", description: "Repo URL", name: "repoURL")
         string(defaultValue: "https://github.com/mylek/m24_env.git", description: "Repo ENV URL", name: "repoEnvURL")
     }
@@ -43,11 +43,13 @@ pipeline {
                     if (!fileExists("${rootDir}")) {
                         sh "git clone ${params.repoURL} --branch=${params.tag} ${rootDir}"
                     }
+                    
                     if (!fileExists('env')) {
                         sh "git clone ${params.repoEnvURL} env"
-                        sh "ln -s env/env.php ${rootDir}/env.php"
-                        sh "ln -s env/auth.json ${rootDir}/auth.json"
                     }
+                    
+                    sh "ln -s env/env.php ${rootDir}/env.php"
+                    sh "ln -s env/auth.json ${rootDir}/auth.json"
                     
                     dir("${rootDir}") {
                         sh "git fetch origin"
