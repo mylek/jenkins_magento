@@ -24,7 +24,7 @@ pipeline {
                 script {
                     echo "Tool Setup";
                     if (!fileExists('shop')) {
-                        sh "git clone --depth 1 --branch ${params.tag} git clone https://github.com/mylek/magento-module-test.git shop"
+                        sh "git clone https://github.com/mylek/magento-module-test.git --branch {params.tag} --single-branch shop"
                     } else {
                         dir('shop') {
                             sh "git fetch origin"
