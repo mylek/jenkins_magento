@@ -4,7 +4,7 @@ pipeline {
     }
 
     environment {
-        repoURL = "https://github.com/mylek/magento-module-test.git"
+        defRepoURL = "https://github.com/mylek/m24.git"
         phingFile = "/var/jenkins_home/workspace/Magento/phing-latest.phar"
         phingCall = "php ${phingFile}"
     }
@@ -12,6 +12,7 @@ pipeline {
     parameters {
         choice(choices: ["develop", "staging"], description: "Set enviroment", name: "enviroment")
         string(defaultValue: "1.0.0-RC1", description: "Set git Tag", name: "tag")
+        string(defaultValue: "${defRepoURL}", description: "Set git Tag", name: "repoURL")
     }
     
     stages {
@@ -40,7 +41,7 @@ pipeline {
                 script {
                     sh "rm -fr shop"
                     if (!fileExists('shop')) {
-                        sh "git clone ${repoURL} --branch=${params.tag} shop &> /dev/null"
+                        sh "git clone ${params.repoURL} --branch=${params.tag} shop &> /dev/null"
                     }
                     dir('shop') {
                         sh "ls"
