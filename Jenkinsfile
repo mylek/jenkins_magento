@@ -28,10 +28,6 @@ pipeline {
                         sh "git clone https://github.com/mylek/magento-module-test.git --branch=${params.tag} shop"
                     }
                     sh "ls shop"
-                    sh "git fetch origin"
-                    sh "git checkout -f ${params.tag}"
-                    sh "git reset --hard origin/${params.tag}"
-                    sh "ls shop"
                     sh "php -v"
                 }
             }
@@ -53,7 +49,7 @@ pipeline {
         }
         stage("Clear up") {
             steps {
-                sh "rm -fr shop"
+                echo "Clear up";
             }
         }
     }
