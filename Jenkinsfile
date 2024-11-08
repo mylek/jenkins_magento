@@ -48,8 +48,12 @@ pipeline {
                         sh "git clone ${params.repoEnvURL} env"
                     }
 
-                    sh "rm ${rootDir}/env.php"
-                    sh "rm ${rootDir}/auth.json"
+                    if (!fileExists("${rootDir}/env.php")) {
+                        sh "rm ${rootDir}/env.php"
+                    }
+                    if (!fileExists("${rootDir}/auth.json")) {
+                        sh "rm ${rootDir}/auth.json"
+                    }
                     sh "ln -s env/env.php ${rootDir}/env.php"
                     sh "ln -s env/auth.json ${rootDir}/auth.json"
                     
