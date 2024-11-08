@@ -27,7 +27,7 @@ pipeline {
                         sh "git clone https://github.com/mylek/magento-module-test.git shop"
                     }
                     sh "git fetch origin"
-                    sh "git checkout -f ${params.tag}"
+                    sh "git checkout ${params.tag}"
                     sh "ls shop"
                     sh "php -v"
                 }
