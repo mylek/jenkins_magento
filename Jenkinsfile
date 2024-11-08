@@ -28,7 +28,9 @@ pipeline {
         stage("Magento Setup") {
             steps {
                 script {
-                    ssh test@172.17.0.3
+                    sshagent(['docker_ssh']) {
+                        ssh ls
+                    }
                     if (!fileExists("${rootDir}")) {
                         sh "git clone ${params.repoURL} --branch=${params.tag} ${rootDir}"
                     }
