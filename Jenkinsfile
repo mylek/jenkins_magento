@@ -29,7 +29,6 @@ pipeline {
                         dir('shop') {
                             sh "git fetch origin"
                             sh "git checkout -f ${params.tag}"
-                            sh "git reset --hard origin/${params.tag}"
                         }
                     }
                     sh "ls shop"
