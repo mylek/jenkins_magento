@@ -87,7 +87,10 @@ pipeline {
         }
         stage("Clear up") {
             steps {
-                echo "Clear up";
+                sh "rm -rf var_di.tar.gz"
+                sh "rm -rf var_generation.tar.gz"
+                sh "rm -rf pub_static.tar.gz"
+                sh "rm -rf shop.tar.gz"
             }
         }
     }
