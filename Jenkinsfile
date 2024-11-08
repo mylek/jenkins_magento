@@ -29,7 +29,7 @@ pipeline {
             steps {
                 script {
                     sshagent(['docker_ssh']) {
-                        sh 'ssh -yy -o StrictHostKeyChecking=no root@localhost ls'
+                        sh 'ssh root@localhost ls'
                     }
                     if (!fileExists("${rootDir}")) {
                         sh "git clone ${params.repoURL} --branch=${params.tag} ${rootDir}"
