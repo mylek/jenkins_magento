@@ -5,7 +5,7 @@ pipeline {
     
     parameters {
         choice(choices: ["develop", "staging"], description: "Set enviroment", name: "enviroment")
-        string(defaultValue: "", description: "Set git Tag", name: "tag")
+        string(defaultValue: "1.0.0-RC1", description: "Set git Tag", name: "tag")
     }
     
     stages {
@@ -23,14 +23,9 @@ pipeline {
             steps {
                 script {
                     echo "Tool Setup";
-                    if (!fileExists('shop')) {
-                        sh "git clone https://github.com/mylek/magento-module-test.git --branch ${params.tag} --single-branch shop"
-                    } else {
-                        dir('shop') {
-                            sh "git fetch origin"
-                            sh "git checkout -f ${params.tag}"
-                        }
-                    }
+                    sh "git clone https://github.com/mylek/magento-module-test.git shop"
+                    sh "git fetch origin"
+                    sh "git checkout -f ${params.tag}"
                     sh "ls shop"
                     sh "php -v"
                 }
