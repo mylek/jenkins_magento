@@ -62,8 +62,6 @@ pipeline {
                         sh "git fetch origin"
                         sh "git checkout -f ${TAG}"
                         sh "composer install --no-dev"
-                        sh "php bin/magento setup:upgrade"
-                        sh "php bin/magento maintenance:enable"
                         sh "rm -rf var/cache/*"
                         sh "rm -rf var/page_cache/*"
                         sh "rm -rf var/preprocessed/*"
@@ -72,6 +70,8 @@ pipeline {
                         sh "php bin/magento setup:di:compile"
                         sh "php bin/magento setup:static-content:deploy"
                         sh "php bin/magento cache:flush"
+                        sh "php bin/magento maintenance:enable"
+                        sh "php bin/magento setup:upgrade --keep-generated"
                         sh "php bin/magento maintenance:disable"
                         sh "php bin/magento cache:enable"
                     }
