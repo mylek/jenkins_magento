@@ -40,7 +40,6 @@ pipeline {
         stage("Magento Setup") {
             steps {
                 script {
-                    sh "rm -rf ${rootDir}"
                     if (!fileExists("${rootDir}")) {
                         sh "git clone ${params.repoURL} --branch=${params.tag} ${rootDir}"
                     }
