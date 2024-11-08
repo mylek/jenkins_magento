@@ -49,11 +49,11 @@ pipeline {
                     }
 
                     if (fileExists("${rootDir}/app/etc/env.php")) {
-                        sh "rm ${rootDir}/env.php"
+                        sh "rm -rf ${rootDir}/env.php"
                     }
                     echo "${rootDir}/auth.json"
                     if (fileExists("${rootDir}/auth.json")) {
-                        sh "rm ${rootDir}/auth.json"
+                        sh "rm -rf ${rootDir}/auth.json"
                     }
                     sh "ln -s env/env.php ${rootDir}/app/etc/env.php"
                     sh "ln -s env/auth.json ${rootDir}/auth.json"
