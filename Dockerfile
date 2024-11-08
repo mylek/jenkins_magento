@@ -52,6 +52,8 @@ RUN apt-get install -y git
 
 RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
 
+RUN echo 'memory_limit = 2048M' >> /usr/local/etc/php/conf.d/docker-php-memlimit.ini;
+
 RUN mkdir -p /var/www/html \
    && chown -R www-data:www-data /var/www
 
