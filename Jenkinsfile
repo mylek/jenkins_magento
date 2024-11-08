@@ -45,7 +45,15 @@ pipeline {
                     dir('shop') {
                         sh "git fetch origin"
                         sh "git checkout -f ${TAG}"
+                        sh "php bin/magento maintenance:enable"
+                        sh "rm -rf vendor/*"
+                        sh "rm -rf var/cache/*"
+                        sh "rm -rf var/page_cache/*"
+                        sh "rm -rf var/preprocessed/*"
+                        sh "rm -rf pub/static/*"
+                        sh "rm -rf generated/code/*"
                         sh "composer install --no-dev"
+                        sh "php bin/magento setup:upgrade"
                     }
                     sh "ls shop"
                 }
