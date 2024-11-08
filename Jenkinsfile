@@ -23,8 +23,9 @@ pipeline {
             steps {
                 script {
                     echo "Tool Setup";
+                    sh "rm -fr shop"
                     if (!fileExists('shop')) {
-                        sh "git clone https://github.com/mylek/magento-module-test.git shop"
+                        sh "git clone https://github.com/mylek/magento-module-test.git --branch=${params.tag} shop"
                     }
                     sh "ls shop"
                     sh "git fetch origin"
