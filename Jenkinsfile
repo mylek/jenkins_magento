@@ -51,7 +51,8 @@ pipeline {
                     sh "rm -rf ${rootDir}/app/etc/env.php"
                     sh "ln -s env/env.php ${rootDir}/app/etc/env.php"
                     
-                    sh "rm -rf ${rootDir}/auth.json" 
+                    sh "rm -rf ${rootDir}/auth.json"
+                    echo "${rootDir}/auth.json"
                     sh "ln -s env/auth.json ${rootDir}/auth.json"
                     
                     dir("${rootDir}") {
