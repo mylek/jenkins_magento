@@ -22,7 +22,15 @@ pipeline {
         stage("Tool Setup") {
             steps {
                 echo "Tool Setup";
-                git clone https://github.com/mylek/magento-module-test.git test
+                if (!fileExists('shop')) {
+                    sh "git clone https://github.com/mylek/magento-module-test.git shop"
+                } else {
+                    dir('shop') {
+                        sh "git fetch origin"
+                        sh "git checkout -f ${params.tag}"
+                        sh "git reset --hard origin/${params.tag}"
+                    }
+                }
                 sh "php -v"
             }
         }
