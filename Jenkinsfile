@@ -27,7 +27,7 @@ pipeline {
                         sh "curl -sS -O https://www.phing.info/get/phing-latest.phar"
                     }
                     sh "ls "
-                    sh "php ./phing-latest.phar -v"
+                    sh "php /phing-latest.phar -v"
                 }
             }
         }
@@ -42,9 +42,9 @@ pipeline {
                     sh "ls"
                     dir('shop') {
                         sh "ls"
-                        sh "php phing-latest.phar jenkins:flush-all"
-                        sh "php phing-latest.phar jenkins:setup-project"
-                        sh "php phing-latest.phar jenkins:flush-all"
+                        sh "php /phing-latest.phar jenkins:flush-all"
+                        sh "php /phing-latest.phar jenkins:setup-project"
+                        sh "php /phing-latest.phar jenkins:flush-all"
                     }
                     sh "ls shop"
                 }
