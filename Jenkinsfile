@@ -4,7 +4,8 @@ pipeline {
     }
 
     environment {
-        phingCall = "php /var/jenkins_home/workspace/Magento/phing-latest.phar"
+        phingFile = "/var/jenkins_home/workspace/Magento/phing-latest.phar"
+        phingCall = "php ${phingFile}"
     }
     
     parameters {
@@ -26,8 +27,7 @@ pipeline {
         stage("Tool Setup") {
             steps {
                 script {
-                    // Phing
-                    if (!fileExists('phing-latest.phar')) {
+                    if (!fileExists(${phingFile})) {
                         sh "curl -sS https://www.phing.info/get/phing-latest.phar"
                     }
                     sh "${phingCall} -v"
