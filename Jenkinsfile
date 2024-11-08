@@ -28,7 +28,7 @@ pipeline {
                     }
                     sh "ls shop"
                     sh "git fetch origin"
-                    sh "git checkout ${params.tag}"
+                    sh "git checkout tags/${params.tag}"
                     sh "ls shop"
                     sh "php -v"
                 }
