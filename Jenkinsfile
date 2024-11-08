@@ -45,6 +45,7 @@ pipeline {
                     dir('shop') {
                         sh "git fetch origin"
                         sh "git checkout -f ${TAG}"
+                        sh "git reset --hard origin/${TAG}"
                         sh "composer install --no-dev"
                     }
                     sh "ls shop"
