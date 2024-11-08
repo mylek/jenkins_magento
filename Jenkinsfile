@@ -26,6 +26,7 @@ pipeline {
                     if (!fileExists('phing-latest.phar')) {
                         sh "curl -sS -O https://www.phing.info/get/phing-latest.phar"
                     }
+                    sh "ls"
                     sh "phing-latest.phar -v"
                     sh "printenv"
                 }
