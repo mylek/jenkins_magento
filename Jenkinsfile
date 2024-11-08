@@ -33,17 +33,19 @@ pipeline {
         }
         stage("Magento Setup") {
             steps {
-                sh "rm -fr shop"
-                if (!fileExists('shop')) {
-                    sh "git clone https://github.com/mylek/magento-module-test.git --branch=${params.tag} shop &> /dev/null"
+                script {
+                    sh "rm -fr shop"
+                    if (!fileExists('shop')) {
+                        sh "git clone https://github.com/mylek/magento-module-test.git --branch=${params.tag} shop &> /dev/null"
+                    }
+                    sh "ls shop"
+                    dir('shop') {
+                        sh "${phingCall} jenkins:flush-all"
+                        sh "${phingCall} jenkins:setup-project"
+                        sh "${phingCall} jenkins:flush-all"
+                    }
+                    sh "ls shop"
                 }
-                sh "ls shop"
-                dir('shop') {
-                    sh "${phingCall} jenkins:flush-all"
-                    sh "${phingCall} jenkins:setup-project"
-                    sh "${phingCall} jenkins:flush-all"
-                }
-                sh "ls shop"
             }
         }
         stage("Asset Generation") {
