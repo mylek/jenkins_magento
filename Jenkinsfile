@@ -22,19 +22,28 @@ pipeline {
         stage("Tool Setup") {
             steps {
                 script {
-                    echo "Tool Setup";
-                    sh "rm -fr shop"
-                    if (!fileExists('shop')) {
-                        sh "git clone https://github.com/mylek/magento-module-test.git --branch=${params.tag} shop &> /dev/null"
+                    // Phing
+                    if (!fileExists('phing-latest.phar')) {
+                        sh "curl -sS -O https://www.phing.info/get/phing-latest.phar -o ${phingBin}"
                     }
-                    sh "ls shop"
-                    sh "php -v"
+                    sh "${phingCall} -v"
+                    sh "printenv"
                 }
             }
         }
         stage("Magento Setup") {
             steps {
-                echo "Magento Setup";
+                sh "rm -fr shop"
+                if (!fileExists('shop')) {
+                    sh "git clone https://github.com/mylek/magento-module-test.git --branch=${params.tag} shop &> /dev/null"
+                }
+                sh "ls shop"
+                dir('shop') {
+                    sh "${phingCall} jenkins:flush-all"
+                    sh "${phingCall} jenkins:setup-project"
+                    sh "${phingCall} jenkins:flush-all"
+                }
+                sh "ls shop"
             }
         }
         stage("Asset Generation") {
