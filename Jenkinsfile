@@ -13,13 +13,6 @@ pipeline {
         string(defaultValue: "https://github.com/mylek/m24.git", description: "Repo URL", name: "repoURL")
         string(defaultValue: "https://github.com/mylek/m24_env.git", description: "Repo ENV URL", name: "repoEnvURL")
     }
-
-    def remote = [:]
-    remote.name = 'sshagent'
-    remote.host = 'localhost'
-    remote.user = 'root'
-    remote.password = 'password'
-    remote.allowAnyHosts = true
     
     stages {
         stage("Check Input") {
@@ -35,7 +28,9 @@ pipeline {
         stage("Magento Setup") {
             steps {
                 script {
-                    sshCommand remote: remote, command: "ls -lrt"
+                    sshagent(['docker_ssh']) {
+                        ssh 'ls -a'
+                    }
                     if (!fileExists("${rootDir}")) {
                         sh "git clone ${params.repoURL} --branch=${params.tag} ${rootDir}"
                     }
