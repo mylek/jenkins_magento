@@ -41,6 +41,8 @@ pipeline {
                     sh "rm -rf shop"
                     if (!fileExists('shop')) {
                         sh "git clone ${params.repoURL} --branch=${params.tag} shop"
+                        sh "git fetch origin"
+                        sh "git checkout -f ${TAG}"
                         //sh "git clone ${params.repoURL} --branch=${params.tag} shop &> /dev/null"
                     }
                     dir('shop') {
