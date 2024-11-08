@@ -40,6 +40,7 @@ pipeline {
                     sh "ls shop"
                     sh "ls"
                     dir('shop') {
+                        sh "ls"
                         sh "php phing-latest.phar jenkins:flush-all"
                         sh "php phing-latest.phar jenkins:setup-project"
                         sh "php phing-latest.phar jenkins:flush-all"
