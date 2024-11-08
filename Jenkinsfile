@@ -38,6 +38,7 @@ pipeline {
                         sh "git clone https://github.com/mylek/magento-module-test.git --branch=${params.tag} shop &> /dev/null"
                     }
                     sh "ls shop"
+                    sh "ls"
                     dir('shop') {
                         sh "php phing-latest.phar jenkins:flush-all"
                         sh "php phing-latest.phar jenkins:setup-project"
