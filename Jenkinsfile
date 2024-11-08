@@ -4,7 +4,6 @@ pipeline {
     }
 
     environment {
-        defRepoURL = "https://github.com/mylek/m24.git"
         phingFile = "/var/jenkins_home/workspace/Magento/phing-latest.phar"
         phingCall = "php ${phingFile}"
     }
@@ -12,7 +11,7 @@ pipeline {
     parameters {
         choice(choices: ["develop", "staging"], description: "Set enviroment", name: "enviroment")
         string(defaultValue: "1.0.0-RC1", description: "Set git Tag", name: "tag")
-        string(defaultValue: "${defRepoURL}", description: "Set git Tag", name: "repoURL")
+        string(defaultValue: ${defRepoURL}, description: "Set git Tag", name: "repoURL")
     }
     
     stages {
