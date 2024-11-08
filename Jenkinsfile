@@ -6,12 +6,14 @@ pipeline {
     environment {
         phingFile = "/var/jenkins_home/workspace/Magento/phing-latest.phar"
         phingCall = "php ${phingFile}"
+        rootDir = "shop"
     }
     
     parameters {
         choice(choices: ["develop", "staging"], description: "Set enviroment", name: "enviroment")
         string(defaultValue: "1.0.0-RC5", description: "Set git Tag", name: "tag")
         string(defaultValue: "https://github.com/mylek/m24.git", description: "Repo URL", name: "repoURL")
+        string(defaultValue: "https://github.com/mylek/m24_env.git", description: "Repo ENV URL", name: "repoEnvURL")
     }
     
     stages {
@@ -38,11 +40,16 @@ pipeline {
         stage("Magento Setup") {
             steps {
                 script {
-                    if (!fileExists('shop')) {
-                        sh "git clone ${params.repoURL} --branch=${params.tag} shop"
-                        //sh "git clone ${params.repoURL} --branch=${params.tag} shop &> /dev/null"
+                    if (!fileExists("${rootDir}")) {
+                        sh "git clone ${params.repoURL} --branch=${params.tag} ${rootDir}"
                     }
-                    dir('shop') {
+                    if (!fileExists('env')) {
+                        sh "git clone ${params.repoEnvURL} env"
+                        sh "ln -s env/env.php ${rootDir}/env.php"
+                        sh "ln -s env/auth.json ${rootDir}/auth.json"
+                    }
+                    
+                    dir("${rootDir}") {
                         sh "git fetch origin"
                         sh "git checkout -f ${TAG}"
                         sh "php bin/magento maintenance:enable"
