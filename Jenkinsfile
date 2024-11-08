@@ -38,12 +38,13 @@ pipeline {
         stage("Magento Setup") {
             steps {
                 script {
-                    sh "rm -rf shop"
                     if (!fileExists('shop')) {
                         sh "git clone ${params.repoURL} --branch=${params.tag} shop"
                         //sh "git clone ${params.repoURL} --branch=${params.tag} shop &> /dev/null"
                     }
                     dir('shop') {
+                        sh "git fetch origin"
+                        sh "git checkout -f ${TAG}"
                         sh "composer install --no-dev"
                     }
                     sh "ls shop"
