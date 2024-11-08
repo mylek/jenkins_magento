@@ -26,9 +26,7 @@ pipeline {
                     if (!fileExists('phing-latest.phar')) {
                         sh "curl -sS -O https://www.phing.info/get/phing-latest.phar"
                     }
-                    sh "ls"
-                    sh "pwd"
-                    sh "php /phing-latest.phar -v"
+                    sh "php /var/jenkins_home/workspace/Magento/phing-latest.phar -v"
                 }
             }
         }
@@ -43,7 +41,7 @@ pipeline {
                     sh "ls"
                     dir('shop') {
                         sh "ls"
-                        sh "php /phing-latest.phar jenkins:flush-all"
+                        sh "php /var/jenkins_home/workspace/Magento/phing-latest.phar jenkins:flush-all"
                         sh "php /phing-latest.phar jenkins:setup-project"
                         sh "php /phing-latest.phar jenkins:flush-all"
                     }
