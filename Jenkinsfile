@@ -27,7 +27,7 @@ pipeline {
                         sh "curl -sS -O https://www.phing.info/get/phing-latest.phar"
                     }
                     sh "ls "
-                    sh "php ./run/phing-latest.phar -v"
+                    sh "php ./phing-latest.phar -v"
                 }
             }
         }
