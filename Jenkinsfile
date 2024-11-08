@@ -45,13 +45,7 @@ pipeline {
                     dir('shop') {
                         sh "git fetch origin"
                         sh "git checkout -f ${TAG}"
-                    }
-                    
-                    dir('shop') {
-                        sh "ls"
-                        sh "${phingCall} jenkins:flush-all"
-                        sh "${phingCall} jenkins:setup-project"
-                        sh "${phingCall} jenkins:flush-all"
+                        sh "composer install --no-dev"
                     }
                     sh "ls shop"
                 }
