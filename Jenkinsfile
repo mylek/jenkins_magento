@@ -27,7 +27,7 @@ pipeline {
         stage("Tool Setup") {
             steps {
                 script {
-                    if (!fileExists(${phingFile})) {
+                    if (!fileExists("${phingFile}")) {
                         sh "curl -sS https://www.phing.info/get/phing-latest.phar"
                     }
                     sh "${phingCall} -v"
