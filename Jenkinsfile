@@ -18,6 +18,7 @@ pipeline {
         stage("Check Input") {
             steps {
                 script {
+                    sh "ping openssh-server"
                     sshagent(['docker_ssh']) {
                         sh "ssh -v -o StrictHostKeyChecking=no myl@openssh-server -p 2222 ls"
                     }
