@@ -25,17 +25,6 @@ pipeline {
                 }
             }
         }
-        node {
-          def remote = [:]
-          remote.name = 'test'
-          remote.host = 'localhost'
-          remote.user = 'myl'
-          remote.password = 'myl'
-          remote.allowAnyHosts = true
-          stage('Remote SSH') {
-            sshCommand remote: remote, command: "ls -la"
-          }
-        }
         stage("Magento Setup") {
             steps {
                 script {
