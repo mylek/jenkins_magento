@@ -19,7 +19,7 @@ pipeline {
             steps {
                 script {
                     sshagent(['docker_ssh']) {
-                        sh 'ls -la'
+                        sh "ssh -o StrictHostKeyChecking=no myl@localhost -p 2222"
                     }
                     if (params.tag == '') {
                         currentBuild.result = 'ABORTED'
