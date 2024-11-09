@@ -19,7 +19,7 @@ pipeline {
             steps {
                 script {
                     sshagent(['docker_ssh']) {
-                        sh "ssh -v myl@openssh-server -p 2222 ls"
+                        sh "ssh -v -o StrictHostKeyChecking=no myl@openssh-server -p 2222 ls"
                     }
                     if (params.tag == '') {
                         currentBuild.result = 'ABORTED'
