@@ -28,16 +28,17 @@ pipeline {
         stage("Magento Setup") {
             steps {
                 script {
-                    wremote = [:]
-                    remote.name = "name"
-                    remote.host = "localhost"
-                    remote.allowAnyHosts = true
-                    remote.failOnError = true
-                    withCredentials([usernamePassword(credentialsId: 'my_credentials', passwordVariable: 'myl', usernameVariable: 'myl')]) {
-                        remote.user = username
-                        remote.password = password
-                        sshCommand remote: remote, command: "ls -a"
-                   }
+                    node {
+                      def remote = [:]
+                      remote.name = 'test'
+                      remote.host = 'localhost'
+                      remote.user = 'myl'
+                      remote.password = 'myl'
+                      remote.allowAnyHosts = true
+                      stage('Remote SSH') {
+                        sshCommand remote: remote, command: "ls -la"
+                      }
+                    }
                     if (!fileExists("${rootDir}")) {
                         sh "git clone ${params.repoURL} --branch=${params.tag} ${rootDir}"
                     }
