@@ -28,9 +28,16 @@ pipeline {
         stage("Magento Setup") {
             steps {
                 script {
-                    sshagent(['docker_ssh']) {
-                        sh 'ssh root@localhost ls'
-                    }
+                    wremote = [:]
+                    remote.name = "name"
+                    remote.host = "localhost"
+                    remote.allowAnyHosts = true
+                    remote.failOnError = true
+                    withCredentials([usernamePassword(credentialsId: 'my_credentials', passwordVariable: 'myl', usernameVariable: 'myl')]) {
+                        remote.user = username
+                        remote.password = password
+                        sshCommand remote: remote, command: "ls -a"
+                   }
                     if (!fileExists("${rootDir}")) {
                         sh "git clone ${params.repoURL} --branch=${params.tag} ${rootDir}"
                     }
