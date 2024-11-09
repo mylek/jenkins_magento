@@ -18,6 +18,9 @@ pipeline {
         stage("Check Input") {
             steps {
                 script {
+                    sshagent(['docker_ssh']) {
+                        sh 'ls -la'
+                    }
                     if (params.tag == '') {
                         currentBuild.result = 'ABORTED'
                         error('Tag not set')
