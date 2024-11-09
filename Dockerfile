@@ -57,6 +57,8 @@ RUN echo 'memory_limit = 2048M' >> /usr/local/etc/php/conf.d/docker-php-memlimit
 RUN mkdir -p /var/www/html \
    && chown -R www-data:www-data /var/www
 
+RUN apt-get install -y iputils-ping
+
 USER www-data:www-data
 VOLUME /var/www
 WORKDIR /var/www/html
