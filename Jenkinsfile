@@ -18,7 +18,6 @@ pipeline {
         stage("Check Input") {
             steps {
                 script {
-                    sh "telnet 127.0.0.1 8080"
                     sshagent(['docker_ssh']) {
                         sh "ssh -v -o StrictHostKeyChecking=no myl@openssh-server -p 2222 ls"
                     }
