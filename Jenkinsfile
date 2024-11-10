@@ -15,17 +15,6 @@ pipeline {
     }
     
     stages {
-        def remote = [:]
-        remote.name = 'test'
-        remote.host = '172.22.0.3'
-        remote.user = 'myl'
-        remote.password = 'myl'
-        remote.port = '2222'
-        remote.allowAnyHosts = true
-        stage('Remote SSH') {
-            sshCommand remote: remote, command: "ls -lrt"
-            sshCommand remote: remote, command: "for i in {1..5}; do echo -n \"Loop \$i \"; date ; sleep 1; done"
-        }
         stage("Check Input") {
             steps {
                 script {
