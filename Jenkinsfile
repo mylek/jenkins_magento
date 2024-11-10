@@ -19,7 +19,7 @@ pipeline {
             steps {
                 script {
                     sshagent(['ssh_server']) {
-                        sh "ssh myl@172.22.0.3 -p 2222 ls"
+                        sh "ssh -o StrictHostKeyChecking=no myl@172.22.0.3 -p 2222"
                     }
                     if (params.tag == '') {
                         currentBuild.result = 'ABORTED'
