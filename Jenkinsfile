@@ -19,7 +19,7 @@ pipeline {
             steps {
                 script {
                     sshagent(['ssh_server']) {
-                        sh "ssh -i myl@openssh-server -p 2222 ls"
+                        sh "ssh myl@myl@172.22.0.3 -p 2222 ls"
                     }
                     if (params.tag == '') {
                         currentBuild.result = 'ABORTED'
