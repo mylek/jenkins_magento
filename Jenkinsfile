@@ -18,8 +18,8 @@ pipeline {
         stage("Check Input") {
             steps {
                 script {
-                    sshagent(['ssh_server']) {
-                        sh "ssh -o StrictHostKeyChecking=no myl@openssh-server -p 22"
+                    sshagent(['ssh-agent']) {
+                        sh "ssh -o StrictHostKeyChecking=no ubuntu@ec2-63-32-44-175.eu-west-1.compute.amazonaws.com -p 22"
                     }
                     if (params.tag == '') {
                         currentBuild.result = 'ABORTED'
