@@ -1,4 +1,8 @@
 pipeline {
+    agent none
+    //agent {
+    //    dockerfile true
+    //}
     environment {
         rootDir = "shop"
     }
