@@ -17,7 +17,7 @@ pipeline {
         stage("Check Input") {
             steps {
                 script {
-                    sh "echo $UID"
+                    sh "ls -la"
                     sshagent(['ssh-agent']) {
                         sh "ssh -tt -o StrictHostKeyChecking=no ubuntu@ec2-63-32-44-175.eu-west-1.compute.amazonaws.com ls -a"
                     }
