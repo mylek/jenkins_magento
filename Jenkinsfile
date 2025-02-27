@@ -19,7 +19,7 @@ pipeline {
             steps {
                 script {
                     sshagent(['ssh-agent']) {
-                        sh "ssh -tt -o StrictHostKeyChecking=no ubuntu@ec2-63-32-44-175.eu-west-1.compute.amazonaws.com ls"
+                        sh "ssh -tt -o StrictHostKeyChecking=no ubuntu@ec2-63-32-44-175.eu-west-1.compute.amazonaws.com ls -a"
                     }
                     if (params.tag == '') {
                         currentBuild.result = 'ABORTED'
