@@ -1,5 +1,5 @@
 pipeline {
-    agent { label 'linux && java' }
+    agent { label 'master' }
     //agent {
     //    dockerfile true
     //}
