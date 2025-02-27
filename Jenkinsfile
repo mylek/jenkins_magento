@@ -18,7 +18,7 @@ pipeline {
         stage("Check Input") {
             steps {
                 script {
-                    sshagent(['ssh-agent']) {
+                    sshagent(['ssh-agent2']) {
                         sh "ssh -tt -o StrictHostKeyChecking=no ubuntu@ec2-63-32-44-175.eu-west-1.compute.amazonaws.com ls"
                     }
                     if (params.tag == '') {
