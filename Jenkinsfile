@@ -66,7 +66,7 @@ pipeline {
                             sh "rm -rf var/preprocessed/*"
                             sh "rm -rf pub/static/*"
                             sh "rm -rf generated/code/*"
-                            //sh "php bin/magento setup:di:compile"
+                            sh "php bin/magento setup:di:compile"
                             //sh "php bin/magento setup:static-content:deploy"
                             //sh "php bin/magento cache:flush"
                             //sh "php bin/magento maintenance:enable"
