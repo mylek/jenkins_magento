@@ -18,7 +18,7 @@ pipeline {
         stage("Check Input") {
             steps {
                 script {
-                    dockerImage = docker.build("Dockerfile")
+                    dockerImage = docker.build("test")
                     sh "whoami"
                     sh "cat /etc/passwd"
                     sshagent(['ssh-agent']) {
