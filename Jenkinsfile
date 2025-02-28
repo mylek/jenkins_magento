@@ -26,10 +26,14 @@ pipeline {
             }
         }
         stage("Initiation docker contener") {
-            phpContainer = docker.build("magento")
-            sshagent(['ssh-agent']) {
-                sh "ssh -tt -o StrictHostKeyChecking=no ubuntu@ec2-63-32-44-175.eu-west-1.compute.amazonaws.com ls -a"
-            }
+            steps {
+                script {
+                    phpContainer = docker.build("magento")
+                    sshagent(['ssh-agent']) {
+                        sh "ssh -tt -o StrictHostKeyChecking=no ubuntu@ec2-63-32-44-175.eu-west-1.compute.amazonaws.com ls -a"
+                    }
+                }
+            }ś
         }
         stage("Magento Setup") {
             steps {
