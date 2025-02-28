@@ -44,6 +44,7 @@ pipeline {
                         }
     
                         //if (!fileExists('env')) {
+                            sh "rm env"
                             sh "git clone ${params.repoEnvURL} env"
                         //}
     
