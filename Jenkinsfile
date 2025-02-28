@@ -61,11 +61,15 @@ pipeline {
                             sh "git fetch origin"
                             sh "git checkout -f ${TAG}"
                             sh "composer install --no-dev"
+                            
                             sh "rm -rf var/cache/*"
                             sh "rm -rf var/page_cache/*"
                             sh "rm -rf var/preprocessed/*"
                             sh "rm -rf pub/static/*"
                             sh "rm -rf generated/code/*"
+
+                            sh 'pwd'
+                            sh 'ls -la'
                             sh "php bin/magento setup:di:compile"
                             //sh "php bin/magento setup:static-content:deploy"
                             //sh "php bin/magento cache:flush"
