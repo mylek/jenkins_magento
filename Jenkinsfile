@@ -50,6 +50,7 @@ pipeline {
                         if (fileExists('${rootDir}/app/etc/env.php')) {
                             sh "rm -rf ${rootDir}/app/etc/env.php"
                         }
+                        sh "cat app/etc/env.php"
                         sh "cp env/env.php ${rootDir}/app/etc/env.php"
     
                         if (fileExists('${rootDir}/auth.json')) {
