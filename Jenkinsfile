@@ -33,9 +33,7 @@ pipeline {
             steps {
                 script {
                     phpContainer.inside {
-                        sh 'ls -la'
-                    }
-                    if (!fileExists("${rootDir}")) {
+                        if (!fileExists("${rootDir}")) {
                         sh "git clone ${params.repoURL} --branch=${params.tag} ${rootDir}"
                     }
 
@@ -69,6 +67,8 @@ pipeline {
                         //sh "php bin/magento setup:upgrade --keep-generated"
                         //sh "php bin/magento maintenance:disable"
                         //sh "php bin/magento cache:enable"
+                    }
+                        sh 'ls -la'
                     }
                 }
             }
