@@ -18,9 +18,7 @@ pipeline {
         stage("Check Input") {
             steps {
                 script {
-                    dockerImage = docker.build("test")
-                    sh "whoami"
-                    sh "cat /etc/passwd"
+                    phpContainer = docker.build("magento")
                     sshagent(['ssh-agent']) {
                         sh "ssh -tt -o StrictHostKeyChecking=no ubuntu@ec2-63-32-44-175.eu-west-1.compute.amazonaws.com ls -a"
                     }
@@ -34,6 +32,9 @@ pipeline {
         stage("Magento Setup") {
             steps {
                 script {
+                    phpContainer.inside {
+                        sh 'ls -la'
+                    }
                     if (!fileExists("${rootDir}")) {
                         sh "git clone ${params.repoURL} --branch=${params.tag} ${rootDir}"
                     }
