@@ -33,7 +33,7 @@ pipeline {
                         sh "ssh -tt -o StrictHostKeyChecking=no ubuntu@ec2-63-32-44-175.eu-west-1.compute.amazonaws.com ls -a"
                     }
                 }
-            }ś
+            }
         }
         stage("Magento Setup") {
             steps {
