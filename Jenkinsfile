@@ -43,9 +43,9 @@ pipeline {
                             sh "git clone ${params.repoURL} --branch=${params.tag} ${rootDir}"
                         }
     
-                        if (!fileExists('env')) {
+                        //if (!fileExists('env')) {
                             sh "git clone ${params.repoEnvURL} env"
-                        }
+                        //}
     
                         if (fileExists('${rootDir}/app/etc/env.php')) {
                             sh "rm -rf ${rootDir}/app/etc/env.php"
