@@ -63,7 +63,7 @@ pipeline {
                             sh "git checkout -f ${TAG}"
                             sh "composer install --no-dev"
                             
-                            sh "rm -rf var/cache/*"
+                            sh "rm -rf var/cache"
                             sh "rm -rf var/page_cache/*"
                             sh "rm -rf var/preprocessed/*"
                             sh "rm -rf pub/static/*"
