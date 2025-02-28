@@ -43,14 +43,14 @@ pipeline {
                             sh "git clone ${params.repoURL} --branch=${params.tag} ${rootDir}"
                         }
     
-                        if (!fileExists('env')) {
+                        //if (!fileExists('env')) {
+                            sh "rm -rf env"
                             sh "git clone ${params.repoEnvURL} env"
-                        }
+                        //}
     
                         if (fileExists('${rootDir}/app/etc/env.php')) {
                             sh "rm -rf ${rootDir}/app/etc/env.php"
                         }
-                        sh "cat ${rootDir}/app/etc/env.php"
                         sh "cp env/env.php ${rootDir}/app/etc/env.php"
     
                         if (fileExists('${rootDir}/auth.json')) {
