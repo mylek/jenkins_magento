@@ -68,6 +68,7 @@ pipeline {
                             sh "rm -rf pub/static/*"
                             sh "rm -rf generated/code/*"
 
+                            sh "php bin/magento deploy:mode:set production"
                             sh "php bin/magento setup:di:compile"
                             sh "php bin/magento setup:static-content:deploy -f"
                             sh "php bin/magento cache:flush"
