@@ -84,6 +84,8 @@ pipeline {
             steps {
                 script {
                     phpContainer.inside {
+                        sh 'pwd'
+                        sh 'ls -la'
                         sh "tar -cvf var_di.tar.gz ${rootDir}/var/di"
                         sh "rm -rf ${rootDir}/var/di"
                         sh "tar -cvf var_generation.tar.gz ${rootDir}/generated"
