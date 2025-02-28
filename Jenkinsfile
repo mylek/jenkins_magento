@@ -68,6 +68,7 @@ pipeline {
                             sh "rm -rf pub/static/*"
                             sh "rm -rf generated/code/*"
 
+                            sh 'pwd'
                             sh 'ls ${rootDir}/app/etc/'
                             sh "php bin/magento setup:di:compile"
                             //sh "php bin/magento setup:static-content:deploy"
