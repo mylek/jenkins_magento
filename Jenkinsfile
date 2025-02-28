@@ -71,7 +71,7 @@ pipeline {
 
                             sh "cat app/etc/env.php"
 
-                            sh "php bin/magento setup:upgrade"
+                            sh "php bin/magento"
                             sh "php bin/magento setup:di:compile"
                             sh "php bin/magento setup:static-content:deploy -f"
                             sh "php bin/magento cache:flush"
