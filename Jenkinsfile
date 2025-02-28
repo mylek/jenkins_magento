@@ -1,7 +1,8 @@
 pipeline {
-    agent {
-        dockerfile true
-    }
+    agent any
+    //agent {
+        //dockerfile true
+    //}
     environment {
         rootDir = "shop"
     }
@@ -17,6 +18,7 @@ pipeline {
         stage("Check Input") {
             steps {
                 script {
+                    dockerImage = docker.build("Dockerfile")
                     sh "whoami"
                     sh "cat /etc/passwd"
                     sshagent(['ssh-agent']) {
