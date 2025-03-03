@@ -9,7 +9,7 @@ pipeline {
     
     parameters {
         choice(choices: ["develop", "staging"], description: "Set enviroment", name: "enviroment")
-        string(defaultValue: "1.0.0-RC8", description: "Set git Tag", name: "tag")
+        string(defaultValue: "1.0.0-RC9", description: "Set git Tag", name: "tag")
         string(defaultValue: "https://github.com/mylek/m24.git", description: "Repo URL", name: "repoURL")
         string(defaultValue: "https://github.com/mylek/m24_env.git", description: "Repo ENV URL", name: "repoEnvURL")
     }
@@ -43,13 +43,12 @@ pipeline {
                             sh "git clone ${params.repoURL} --branch=${params.tag} ${rootDir}"
                         }
     
-                        //if (!fileExists('env')) {
-                            sh "rm -rf env"
+                        if (!fileExists('env')) {
                             sh "git clone ${params.repoEnvURL} env"
-                        //}
+                        }
     
                         //if (fileExists('${rootDir}/app/etc/env.php')) {
-                            sh "rm -rf ${rootDir}/app/etc/env.php"
+                            //sh "rm -rf ${rootDir}/app/etc/env.php"
                         //}
                         //sh "cp env/env.php ${rootDir}/app/etc/env.php"
     
@@ -69,16 +68,10 @@ pipeline {
                             sh "rm -rf pub/static/*"
                             sh "rm -rf generated/code/*"
 
-                            sh "cat app/etc/config.php"
-
-                            sh "php bin/magento -vvv"
                             sh "php bin/magento setup:di:compile"
                             sh "php bin/magento setup:static-content:deploy -f"
-                            sh "php bin/magento cache:flush"
-                            sh "php bin/magento maintenance:enable"
                             sh "php bin/magento setup:upgrade --keep-generated"
-                            sh "php bin/magento maintenance:disable"
-                            sh "php bin/magento cache:enable"
+                            sh "php bin/magento cache:flush"
                             sh 'pwd'
                             sh 'ls -la'
                         }
