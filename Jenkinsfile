@@ -35,7 +35,7 @@ pipeline {
             }
         }
 
-    stage("Deployment") {
+        stage("Deployment test") {
             steps {
                 echo "Deployment enviroment ${params.enviroment} tag: ${params.tag}";
 
@@ -111,14 +111,6 @@ pipeline {
         stage("Deployment") {
             steps {
                 echo "Deployment enviroment ${params.enviroment} tag: ${params.tag}";
-
-                def dockerRun = "whoami && \
-                ls -la && \
-                pwd"
-
-                sshagent(['ssh-agent']) {
-                    sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} ls -a"
-                }
             }
         }
         stage("Clear up") {
