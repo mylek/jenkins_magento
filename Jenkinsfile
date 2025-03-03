@@ -30,7 +30,7 @@ pipeline {
             steps {
                 script {
                     phpContainer = docker.build("magento")
-                    release = sh(script: "echo `date +%s`", returnStdout: true).trim()
+                    releaseTimestamp = sh(script: "echo `date +%s`", returnStdout: true).trim()
                     echo release
                 }
             }
@@ -42,7 +42,7 @@ pipeline {
 
                 script {
                     sshagent(['ssh-agent']) {
-                        sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} \"bash -s\" < deploy.sh 1234"
+                        sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} \"bash -s\" < deploy.sh ${releaseTimestamp}"
                     }
                 }
             }
