@@ -48,7 +48,7 @@ pipeline {
                         }
 
                         sh "cat ${rootDir}/app/etc/env.php"
-                        sh "[ -f file ] && echo 1 || echo 0"
+                        sh "[ -f ${rootDir}/app/etc/env.php ] && echo 1 || echo 0"
                         if (sh "[ -f ${rootDir}/app/etc/env.php ]")) {
                             sh "rm -rf ${rootDir}/app/etc/env.php"
                         }
