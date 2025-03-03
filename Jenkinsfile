@@ -85,9 +85,9 @@ pipeline {
                 script {
                     phpContainer.inside {
                         // Archive assets
-                        sh "tar -cvf var_generation.tar.gz ${rootDir}/generated"
+                        sh "tar -cf var_generation.tar.gz ${rootDir}/generated"
                         sh "rm -rf ${rootDir}/generated"
-                        sh "tar -cvf pub_static.tar.gz ${rootDir}/pub/static"
+                        sh "tar -cf pub_static.tar.gz ${rootDir}/pub/static"
                         sh "rm -rf ${rootDir}/pub/static"
 
                         // Put env.php
@@ -97,7 +97,7 @@ pipeline {
                         sh "cp env/env.php ${rootDir}/app/etc/env.php"
 
                         // Archive store content
-                        sh "tar -cvf shop.tar.gz ${rootDir}"
+                        sh "tar -cf shop.tar.gz ${rootDir}"
                         sh "ls"
                     }
                 }
