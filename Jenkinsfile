@@ -31,6 +31,7 @@ pipeline {
                 script {
                     phpContainer = docker.build("magento")
                     release = '${currentBuild.startTimeInMillis}'
+                    echo release
                 }
             }
         }
