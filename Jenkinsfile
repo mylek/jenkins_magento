@@ -11,7 +11,6 @@ pipeline {
         choice(choices: ["develop", "staging"], description: "Set enviroment", name: "enviroment")
         string(defaultValue: "1.0.0-RC9", description: "Set git Tag", name: "tag")
         string(defaultValue: "https://github.com/mylek/m24.git", description: "Repo URL", name: "repoURL")
-        string(defaultValue: "https://github.com/mylek/m24_env.git", description: "Repo ENV URL", name: "repoEnvURL")
         string(defaultValue: "ubuntu@ec2-63-32-44-175.eu-west-1.compute.amazonaws.com", description: "Server SSH host", name: "sshHost")
     }
     
@@ -57,11 +56,6 @@ pipeline {
     
                         if (sh(script: "#!/bin/sh \n test -e env", returnStatus: true) == 1) {
                             sh "git clone ${params.repoEnvURL} env"
-                        }
-
-                        // Remove env.php if exists
-                        if (sh(script: "#!/bin/sh \n test -e ${rootDir}/app/etc/env.php", returnStatus: true) == 0) {
-                            sh "rm -rf ${rootDir}/app/etc/env.php"
                         }
     
                         if (sh(script: "#!/bin/sh \n test -e ${rootDir}/auth.json", returnStatus: true) == 0) {
