@@ -35,9 +35,9 @@ pipeline {
             }
         }
 
-        stage("Deployment test") {
-            steps {
-                echo "Deployment enviroment ${params.enviroment} tag: ${params.tag}";
+        //stage("Deployment test") {
+            //steps {
+                //echo "Deployment enviroment ${params.enviroment} tag: ${params.tag}";
 
                 //script {
                 //    dockerRun = "whoami && \
@@ -48,8 +48,8 @@ pipeline {
                     //    sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} ls -a"
                     //}
                 //}
-            }
-        }
+            //}
+        //}
         
         stage("Magento Setup") {
             steps {
