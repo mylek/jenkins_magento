@@ -30,7 +30,7 @@ pipeline {
             steps {
                 script {
                     phpContainer = docker.build("magento")
-                    release = currentBuild.startTimeInMillis
+                    release = sh(script: "echo `date +%s`", returnStdout: true).trim()
                     echo release
                 }
             }
