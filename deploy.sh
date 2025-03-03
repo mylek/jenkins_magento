@@ -1,4 +1,5 @@
+RELEASE=$1
 echo $1
 cd /var/www/html
-mkdir releases/$1
+mkdir releases/$RELEASE
 ls
