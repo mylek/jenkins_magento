@@ -39,15 +39,15 @@ pipeline {
             steps {
                 //echo "Deployment enviroment ${params.enviroment} tag: ${params.tag}";
 
-                script {
-                    dockerRun = "whoami && \
-                    ls -la && \
-                    pwd"
+                //script {
+                //    dockerRun = "whoami && \
+                //    ls -la && \
+                //    pwd"
     
                     //sshagent(['ssh-agent']) {
                     //    sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} ls -a"
                     //}
-                }
+                //}
             }
         }
         
