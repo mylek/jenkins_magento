@@ -58,16 +58,19 @@ pipeline {
                         sh "cp env/auth.json ${rootDir}/auth.json"
                         
                         dir("${rootDir}") {
+                            // Git checkout
                             sh "git fetch origin"
                             sh "git checkout -f ${TAG}"
                             sh "composer install --no-dev"
-                            
+
+                            // Clear cache
                             sh "rm -rf var/cache"
                             sh "rm -rf var/page_cache/*"
                             sh "rm -rf var/preprocessed/*"
                             sh "rm -rf pub/static/*"
                             sh "rm -rf generated/code/*"
 
+                            // Compilate
                             sh "php bin/magento setup:di:compile"
                             sh "php bin/magento setup:static-content:deploy -f"
                             sh 'pwd'
@@ -81,8 +84,7 @@ pipeline {
             steps {
                 script {
                     phpContainer.inside {
-                        sh 'ls -la ${rootDir}/'
-                        sh 'ls -la ${rootDir}/di'
+                        // Archive assets
                         sh "tar -cvf var_di.tar.gz ${rootDir}/var/di"
                         sh "rm -rf ${rootDir}/var/di"
                         sh "tar -cvf var_generation.tar.gz ${rootDir}/generated"
@@ -95,7 +97,8 @@ pipeline {
                             sh "rm -rf ${rootDir}/app/etc/env.php"
                         }
                         sh "cp env/env.php ${rootDir}/app/etc/env.php"
-                        
+
+                        // Archive store content
                         sh "tar -cvf shop.tar.gz ${rootDir}"
                         sh "ls"
                     }
