@@ -12,6 +12,7 @@ pipeline {
         string(defaultValue: "1.0.0-RC9", description: "Set git Tag", name: "tag")
         string(defaultValue: "https://github.com/mylek/m24.git", description: "Repo URL", name: "repoURL")
         string(defaultValue: "https://github.com/mylek/m24_env.git", description: "Repo ENV URL", name: "repoEnvURL")
+        string(defaultValue: "ubuntu@ec2-63-32-44-175.eu-west-1.compute.amazonaws.com", description: "Server SSH host", name: "sshHost")
     }
     
     stages {
@@ -25,10 +26,12 @@ pipeline {
                 }
             }
         }
-        stage("Initiation docker contener") {
+        stage("Init") {
             steps {
                 script {
                     phpContainer = docker.build("magento")
+                    release = sh "$(date +%s)"
+                    echo release
                     //sshagent(['ssh-agent']) {
                     //    sh "ssh -tt -o StrictHostKeyChecking=no ubuntu@ec2-63-32-44-175.eu-west-1.compute.amazonaws.com ls -a"
                     //}
@@ -97,6 +100,10 @@ pipeline {
         stage("Deployment") {
             steps {
                 echo "Deployment enviroment ${params.enviroment} tag: ${params.tag}";
+
+                sshagent(['ssh-agent']) {
+                    sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} ls -a"
+                }
             }
         }
         stage("Clear up") {
