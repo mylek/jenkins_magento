@@ -46,10 +46,8 @@ pipeline {
                         if (!fileExists('env')) {
                             sh "git clone ${params.repoEnvURL} env"
                         }
-
-                        sh "cat ${rootDir}/app/etc/env.php"
-                        sh "[ -f ${rootDir}/app/etc/env.php ] && echo 1 || echo 0"
-                        if (sh "[ -f ${rootDir}/app/etc/env.php ]")) {
+                        
+                        if (sh(script: "#!/bin/sh \n test -e ${rootDir}/app/etc/env.php", returnStatus: true) == 0) {
                             sh "rm -rf ${rootDir}/app/etc/env.php"
                         }
                         // Remove env.php if exists
