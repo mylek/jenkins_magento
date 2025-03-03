@@ -70,7 +70,6 @@ pipeline {
 
                             sh "php bin/magento setup:di:compile"
                             sh "php bin/magento setup:static-content:deploy -f"
-                            sh "php bin/magento setup:upgrade --keep-generated"
                             sh "php bin/magento cache:flush"
                             sh 'pwd'
                             sh 'ls -la'
@@ -91,6 +90,13 @@ pipeline {
                         sh "rm -rf ${rootDir}/generated"
                         sh "tar -cvf pub_static.tar.gz ${rootDir}/pub/static"
                         sh "rm -rf ${rootDir}/pub/static"
+
+                        // Put env.php
+                        if (fileExists('${rootDir}/app/etc/env.php')) {
+                            sh "rm -rf ${rootDir}/app/etc/env.php"
+                        }
+                        sh "cp env/env.php ${rootDir}/app/etc/env.php"
+                        
                         sh "tar -cvf shop.tar.gz ${rootDir}"
                         sh "ls"
                     }
