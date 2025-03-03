@@ -39,7 +39,7 @@ pipeline {
             steps {
                 echo "Deployment enviroment ${params.enviroment} tag: ${params.tag}";
 
-                def dockerRun = "whoami && \
+                dockerRun = "whoami && \
                 ls -la && \
                 pwd"
 
