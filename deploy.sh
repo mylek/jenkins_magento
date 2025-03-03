@@ -1,9 +1,8 @@
 RELEASE=$1
 cd /var/www/html
 
-ln -sf share/var current/var
-
 mkdir releases/$RELEASE
+ln -sf share/var releases/$RELEASE/var
 ### komendy magento
 
 
