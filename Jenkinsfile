@@ -95,9 +95,6 @@ pipeline {
             steps {
                 script {
                     phpContainer.inside {
-                        // Put env.php
-                        sh "cp env/env.php ${rootDir}/app/etc/env.php"
-
                         // Archive store content
                         sh "tar -cf shop.tar.gz ${rootDir}"
                         sh "ls"
