@@ -30,14 +30,25 @@ pipeline {
             steps {
                 script {
                     phpContainer = docker.build("magento")
-                    release = "TimeStamp: ${currentBuild.startTimeInMillis}"
-                    echo release
-                    //sshagent(['ssh-agent']) {
-                    //    sh "ssh -tt -o StrictHostKeyChecking=no ubuntu@ec2-63-32-44-175.eu-west-1.compute.amazonaws.com ls -a"
-                    //}
+                    release = ${currentBuild.startTimeInMillis}
                 }
             }
         }
+
+    stage("Deployment") {
+            steps {
+                echo "Deployment enviroment ${params.enviroment} tag: ${params.tag}";
+
+                def dockerRun = "whoami && \
+                ls -la && \
+                pwd"
+
+                sshagent(['ssh-agent']) {
+                    sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} ls -a"
+                }
+            }
+        }
+        
         stage("Magento Setup") {
             steps {
                 script {
@@ -100,6 +111,10 @@ pipeline {
         stage("Deployment") {
             steps {
                 echo "Deployment enviroment ${params.enviroment} tag: ${params.tag}";
+
+                def dockerRun = "whoami && \
+                ls -la && \
+                pwd"
 
                 sshagent(['ssh-agent']) {
                     sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} ls -a"
