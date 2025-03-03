@@ -42,7 +42,7 @@ pipeline {
 
                 script {
                     sshagent(['ssh-agent']) {
-                        sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} < deploy.sh \"1234\""
+                        sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} \"bash -s\" < deploy.sh 1234"
                     }
                 }
             }
