@@ -9,7 +9,7 @@ pipeline {
     
     parameters {
         choice(choices: ["develop", "staging"], description: "Set enviroment", name: "enviroment")
-        string(defaultValue: "1.0.0-RC7", description: "Set git Tag", name: "tag")
+        string(defaultValue: "1.0.0-RC8", description: "Set git Tag", name: "tag")
         string(defaultValue: "https://github.com/mylek/m24.git", description: "Repo URL", name: "repoURL")
         string(defaultValue: "https://github.com/mylek/m24_env.git", description: "Repo ENV URL", name: "repoEnvURL")
     }
