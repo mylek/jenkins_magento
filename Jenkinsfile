@@ -44,9 +44,9 @@ pipeline {
                     ls -la && \
                     pwd"
     
-                    sshagent(['ssh-agent']) {
-                        sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} ls -a"
-                    }
+                    //sshagent(['ssh-agent']) {
+                    //    sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} ls -a"
+                    //}
                 }
             }
         }
