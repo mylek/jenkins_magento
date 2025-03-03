@@ -39,23 +39,20 @@ pipeline {
             steps {
                 script {
                     phpContainer.inside {
-                        if (!fileExists("${rootDir}")) {
+                        if (sh(script: "#!/bin/sh \n test -e ${rootDir}", returnStatus: true) == 1) {
                             sh "git clone ${params.repoURL} --branch=${params.tag} ${rootDir}"
                         }
     
-                        if (!fileExists('env')) {
+                        if (sh(script: "#!/bin/sh \n test -e env", returnStatus: true) == 1) {
                             sh "git clone ${params.repoEnvURL} env"
                         }
-                        
+
+                        // Remove env.php if exists
                         if (sh(script: "#!/bin/sh \n test -e ${rootDir}/app/etc/env.php", returnStatus: true) == 0) {
                             sh "rm -rf ${rootDir}/app/etc/env.php"
                         }
-                        // Remove env.php if exists
-                        if (fileExists('${rootDir}/app/etc/env.php')) {
-                            sh "rm -rf ${rootDir}/app/etc/env.php"
-                        }
     
-                        if (fileExists('${rootDir}/auth.json')) {
+                        if (sh(script: "#!/bin/sh \n test -e ${rootDir}/auth.json", returnStatus: true) == 0) {
                             sh "rm -rf ${rootDir}/auth.json"
                         }
                         sh "cp env/auth.json ${rootDir}/auth.json"
@@ -88,9 +85,6 @@ pipeline {
                 script {
                     phpContainer.inside {
                         // Put env.php
-                        if (fileExists('${rootDir}/app/etc/env.php')) {
-                            sh "rm -rf ${rootDir}/app/etc/env.php"
-                        }
                         sh "cp env/env.php ${rootDir}/app/etc/env.php"
 
                         // Archive store content
