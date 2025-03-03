@@ -84,12 +84,6 @@ pipeline {
             steps {
                 script {
                     phpContainer.inside {
-                        // Archive assets
-                        sh "tar -cf var_generation.tar.gz ${rootDir}/generated"
-                        sh "rm -rf ${rootDir}/generated"
-                        sh "tar -cf pub_static.tar.gz ${rootDir}/pub/static"
-                        sh "rm -rf ${rootDir}/pub/static"
-
                         // Put env.php
                         if (fileExists('${rootDir}/app/etc/env.php')) {
                             sh "rm -rf ${rootDir}/app/etc/env.php"
