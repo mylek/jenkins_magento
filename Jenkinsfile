@@ -71,6 +71,7 @@ pipeline {
 
                             sh "cat app/etc/config.php"
 
+                            sh "php bin/magento"
                             sh "php bin/magento setup:di:compile"
                             sh "php bin/magento setup:static-content:deploy -f"
                             sh "php bin/magento cache:flush"
