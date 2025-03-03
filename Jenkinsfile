@@ -35,21 +35,21 @@ pipeline {
             }
         }
 
-        //stage("Deployment test") {
-            //steps {
-                //echo "Deployment enviroment ${params.enviroment} tag: ${params.tag}";
+        stage("Deployment test") {
+            steps {
+                echo "Deployment enviroment ${params.enviroment} tag: ${params.tag}";
 
-                //script {
-                //    dockerRun = "whoami && \
-                //    ls -la && \
-                //    pwd"
+                script {
+                    dockerRun = "whoami && \
+                    ls -la && \
+                    pwd"
     
-                    //sshagent(['ssh-agent']) {
-                    //    sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} ls -a"
-                    //}
-                //}
-            //}
-        //}
+                    sshagent(['ssh-agent']) {
+                        sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} '${dockerRun}'"
+                    }
+                }
+            }
+        }
         
         stage("Magento Setup") {
             steps {
