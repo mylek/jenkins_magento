@@ -1,1 +1,4 @@
 
+whoami
+ls -la
+pwd
