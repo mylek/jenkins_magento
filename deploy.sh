@@ -9,3 +9,5 @@ ln -sf share/pub/media releases/$RELEASE/pub/media
 
 
 ln -sf releases/$RELEASE current
+
+exit
