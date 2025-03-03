@@ -69,7 +69,7 @@ pipeline {
                             sh "rm -rf pub/static/*"
                             sh "rm -rf generated/code/*"
 
-                            sh "cat app/etc/env.php"
+                            sh "cat app/etc/config.php"
 
                             sh "php bin/magento setup:di:compile"
                             sh "php bin/magento setup:static-content:deploy -f"
