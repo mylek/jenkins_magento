@@ -37,7 +37,7 @@ pipeline {
 
         stage("Deployment test") {
             steps {
-                echo "Deployment enviroment ${params.enviroment} tag: ${params.tag}";
+                //echo "Deployment enviroment ${params.enviroment} tag: ${params.tag}";
 
                 script {
                     dockerRun = "whoami && \
