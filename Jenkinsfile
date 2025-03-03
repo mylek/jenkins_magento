@@ -46,11 +46,11 @@ pipeline {
                         if (!fileExists('env')) {
                             sh "git clone ${params.repoEnvURL} env"
                         }
-    
-                        //if (fileExists('${rootDir}/app/etc/env.php')) {
-                            //sh "rm -rf ${rootDir}/app/etc/env.php"
-                        //}
-                        //sh "cp env/env.php ${rootDir}/app/etc/env.php"
+
+                        // Remove env.php if exists
+                        if (fileExists('${rootDir}/app/etc/env.php')) {
+                            sh "rm -rf ${rootDir}/app/etc/env.php"
+                        }
     
                         if (fileExists('${rootDir}/auth.json')) {
                             sh "rm -rf ${rootDir}/auth.json"
