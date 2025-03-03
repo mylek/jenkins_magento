@@ -69,7 +69,7 @@ pipeline {
                             sh "rm -rf generated/code/*"
 
                             sh "php bin/magento setup:di:compile"
-                            sh "php bin/magento setup:static-content:deploy -f"
+                            sh "php bin/magento setup:static-content:deploy"
                             sh 'pwd'
                             sh 'ls -la'
                         }
