@@ -1,4 +1,3 @@
-
-whoami
-ls -la
-pwd
+echo $1
+cd /var/www/html
+ls
