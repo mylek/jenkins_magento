@@ -85,8 +85,6 @@ pipeline {
                 script {
                     phpContainer.inside {
                         // Archive assets
-                        sh "tar -cvf var_di.tar.gz ${rootDir}/var/di"
-                        sh "rm -rf ${rootDir}/var/di"
                         sh "tar -cvf var_generation.tar.gz ${rootDir}/generated"
                         sh "rm -rf ${rootDir}/generated"
                         sh "tar -cvf pub_static.tar.gz ${rootDir}/pub/static"
