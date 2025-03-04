@@ -2,7 +2,7 @@ RELEASE=$1
 cd /var/www/html
 
 mkdir releases/$RELEASE
-tar -xvzf tmp/$RELEASE.tar.gz -C releases/$RELEASE --strip-components=1
+tar -xzf tmp/$RELEASE.tar.gz -C releases/$RELEASE --strip-components=1
 
 ln -sf share/var releases/$RELEASE/var
 ln -sf share/var releases/$RELEASE/app/etc/env.php
