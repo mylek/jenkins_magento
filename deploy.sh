@@ -13,4 +13,7 @@ ln -sf releases/$RELEASE current
 
 rm -rf tmp/$RELEASE.tar.gz
 
+### Remove dir not 3 last
+find . -maxdepth 1 -mindepth 1 -type d -printf "%T+ %f\0" | sort -z | head -z -n -3 | cut -z -d' ' -f 2- | xargs -0 rm -rf
+
 exit
