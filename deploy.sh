@@ -4,12 +4,16 @@ cd /var/www/html
 mkdir releases/$RELEASE
 tar -xzf tmp/$RELEASE.tar.gz -C releases/$RELEASE --strip-components=1
 
+### create assets symlinks
 ln -sf share/var releases/$RELEASE/var
-ln -sf share/var releases/$RELEASE/app/etc/env.php
+ln -sf share/env.php releases/$RELEASE/app/etc/env.php
 ln -sf share/pub/media releases/$RELEASE/pub/media
+
 ### komendy magento
+echo "bin/magento setup:upgrade --keep-generated"
 
 
+### create core symlink
 ln -sf releases/$RELEASE current
 
 rm -rf tmp/$RELEASE.tar.gz
