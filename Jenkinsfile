@@ -94,7 +94,7 @@ pipeline {
                 script {
                     phpContainer.inside {
                         // Archive store content
-                        sh "tar -czf shop.tar.gz ${rootDir}"
+                        sh "tar -czf shop.tar.gz ${rootDir}/*"
                     }
                 }
             }
