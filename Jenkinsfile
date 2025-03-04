@@ -8,7 +8,6 @@ pipeline {
     }
     
     parameters {
-        choice(choices: ["develop", "staging"], description: "Set enviroment", name: "enviroment")
         string(defaultValue: "1.0.0-RC9", description: "Set git Tag", name: "tag")
         string(defaultValue: "https://github.com/mylek/m24.git", description: "Repo URL", name: "repoURL")
         string(defaultValue: "ubuntu@ec2-63-32-44-175.eu-west-1.compute.amazonaws.com", description: "Server SSH host", name: "sshHost")
@@ -31,18 +30,6 @@ pipeline {
                     phpContainer = docker.build("magento")
                     releaseTimestamp = sh(script: "echo `date +%s`", returnStdout: true).trim()
                 }
-            }
-        }
-
-        stage("Deployment test") {
-            steps {
-                echo "Deployment enviroment ${params.enviroment} tag: ${params.tag}";
-
-                //script {
-                //    sshagent(['ssh-agent']) {
-                //        sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} \"bash -s\" < deploy.sh \"${releaseTimestamp}\""
-                //    }
-                //}
             }
         }
         
@@ -101,7 +88,7 @@ pipeline {
         }
         stage("Deployment") {
             steps {
-                echo "Deployment enviroment ${params.enviroment} tag: ${params.tag}";
+                echo "Deployment tag: ${params.tag}";
                 sshagent(['ssh-agent']) {
                     sh "scp -o StrictHostKeyChecking=no shop.tar.gz ${params.sshHost}:/var/www/html/tmp/${releaseTimestamp}.tar.gz"
                     sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} \"bash -s\" < deploy.sh \"${releaseTimestamp}\""
