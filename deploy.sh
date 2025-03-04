@@ -12,7 +12,7 @@ ln -sf share/pub/media releases/$RELEASE/pub/media
 
 ln -sf releases/$RELEASE current
 
-##rm -rf tmp/$RELEASE.tar.gz
+rm -rf tmp/$RELEASE.tar.gz
 
 ### Remove dir not 3 last
 cd releases
