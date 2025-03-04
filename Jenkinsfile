@@ -84,8 +84,6 @@ pipeline {
                             // Compilate
                             sh "php bin/magento setup:di:compile"
                             sh "php bin/magento setup:static-content:deploy -f"
-                            sh 'pwd'
-                            sh 'ls -la'
                         }
                     }
                 }
@@ -96,11 +94,8 @@ pipeline {
                 script {
                     phpContainer.inside {
                         // Archive store content
-                        sh "tar -cf shop.tar.gz ${rootDir}"
-                        sh "ls"
+                        sh "tar -czf shop.tar.gz ${rootDir}"
                     }
-
-                    sh "ls"
                 }
             }
         }
@@ -108,9 +103,8 @@ pipeline {
             steps {
                 echo "Deployment enviroment ${params.enviroment} tag: ${params.tag}";
                 sshagent(['ssh-agent']) {
-                    sh """
-                   scp -o StrictHostKeyChecking=no shop.tar.gz ${params.sshHost}:/var/www/html/tmp/${releaseTimestamp}.tar.gz
-                   """
+                    sh "scp -o StrictHostKeyChecking=no shop.tar.gz ${params.sshHost}:/var/www/html/tmp/${releaseTimestamp}.tar.gz"
+                    sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} \"bash -s\" < deploy.sh \"${releaseTimestamp}\""
                 }
             }
         }
