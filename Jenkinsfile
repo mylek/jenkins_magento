@@ -76,6 +76,7 @@ pipeline {
                 }
             }
         }
+        
         stage("Asset Generation") {
             steps {
                 script {
@@ -86,6 +87,7 @@ pipeline {
                 }
             }
         }
+        
         stage("Deployment") {
             steps {
                 echo "Deployment tag: ${params.tag}";
@@ -95,6 +97,7 @@ pipeline {
                 }
             }
         }
+        
         stage("Clear up") {
             steps {
                 sh "rm -rf shop.tar.gz"
