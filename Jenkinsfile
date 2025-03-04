@@ -1,8 +1,6 @@
 pipeline {
     agent any
-    //agent {
-        //dockerfile true
-    //}
+    
     environment {
         rootDir = "shop"
     }
@@ -24,6 +22,7 @@ pipeline {
                 }
             }
         }
+        
         stage("Init") {
             steps {
                 script {
