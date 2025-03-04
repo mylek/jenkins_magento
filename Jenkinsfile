@@ -99,6 +99,8 @@ pipeline {
                         sh "tar -cf shop.tar.gz ${rootDir}"
                         sh "ls"
                     }
+
+                    sh "ls"
                 }
             }
         }
@@ -109,9 +111,6 @@ pipeline {
         }
         stage("Clear up") {
             steps {
-                sh "rm -rf var_di.tar.gz"
-                sh "rm -rf var_generation.tar.gz"
-                sh "rm -rf pub_static.tar.gz"
                 sh "rm -rf shop.tar.gz"
             }
         }
