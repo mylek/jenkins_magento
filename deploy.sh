@@ -22,6 +22,9 @@ ln -sf releases/$RELEASE current
 ### remove archived files
 rm -rf tmp/$RELEASE.tar.gz
 
+### restart services
+echo "sudo /etc/init.d/php8.1-fpm restart"
+
 ### Remove dir not 3 last
 cd releases
 find . -maxdepth 1 -mindepth 1 -type d -printf "%T+ %f\0" | sort -z | head -z -n -3 | cut -z -d' ' -f 2- | xargs -0 rm -rf
