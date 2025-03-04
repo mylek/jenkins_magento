@@ -19,11 +19,11 @@ cd /var/www/html
 rm current
 ln -sf releases/$RELEASE current
 
-### remove archived files
-rm -rf tmp/$RELEASE.tar.gz
-
 ### restart services
 echo "sudo /etc/init.d/php8.1-fpm restart"
+
+### remove archived files
+rm -rf tmp/$RELEASE.tar.gz
 
 ### Deletes old releases folders leaving the last 3
 cd releases
