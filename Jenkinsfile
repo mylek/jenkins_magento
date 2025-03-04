@@ -38,11 +38,11 @@ pipeline {
             steps {
                 echo "Deployment enviroment ${params.enviroment} tag: ${params.tag}";
 
-                script {
-                    sshagent(['ssh-agent']) {
-                        sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} \"bash -s\" < deploy.sh \"${releaseTimestamp}\""
-                    }
-                }
+                //script {
+                //    sshagent(['ssh-agent']) {
+                //        sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} \"bash -s\" < deploy.sh \"${releaseTimestamp}\""
+                //    }
+                //}
             }
         }
         
@@ -107,6 +107,11 @@ pipeline {
         stage("Deployment") {
             steps {
                 echo "Deployment enviroment ${params.enviroment} tag: ${params.tag}";
+                sshagent(['ssh-agent']) {
+                    sh """
+                   scp -o StrictHostKeyChecking=no shop.tar.gz ${params.sshHost}:/var/www/html/tmp/${releaseTimestamp}.tar.gz
+                   """
+                }
             }
         }
         stage("Clear up") {
