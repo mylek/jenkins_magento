@@ -98,6 +98,8 @@ pipeline {
         stage("Clear up") {
             steps {
                 sh "rm -rf shop.tar.gz"
+                sh "rm -rf ${rootDir}"
+                sh "rm -rf env"
             }
         }
     }
