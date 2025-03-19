@@ -16,7 +16,7 @@ echo "bin/magento setup:upgrade --keep-generated"
 cd /var/www/spamgwozd.chickenkiller.com
 
 ### create core symlink
-rm -fr current
+sudo rm -fr current
 ln -sf releases/$RELEASE current
 
 ### restart services
