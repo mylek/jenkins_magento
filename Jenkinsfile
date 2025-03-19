@@ -92,7 +92,7 @@ pipeline {
             steps {
                 echo "Deployment tag: ${params.tag}";
                 sshagent(['ssh-agent']) {
-                    sh "scp -o StrictHostKeyChecking=no shop.tar.gz ${params.sshHost}:/var/www/html/tmp/${releaseTimestamp}.tar.gz"
+                    sh "scp -o StrictHostKeyChecking=no shop.tar.gz ${params.sshHost}:/var/www/spamgwozd.chickenkiller.com/tmp/${releaseTimestamp}.tar.gz"
                     sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} \"bash -s\" < deploy.sh \"${releaseTimestamp}\""
                 }
             }
