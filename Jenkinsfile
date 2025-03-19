@@ -10,6 +10,7 @@ pipeline {
         string(defaultValue: "https://github.com/mylek/m24.git", description: "Repo URL", name: "repoURL")
         string(defaultValue: "https://github.com/mylek/m24_env.git", description: "Repo ENV URL", name: "repoEnvURL")
         string(defaultValue: "ubuntu@ec2-52-212-92-175.eu-west-1.compute.amazonaws.com", description: "Server SSH host", name: "sshHost")
+        string(defaultValue: "/var/www/spamgwozd.chickenkiller.com", description: "Server dir", name: "serverDir")
     }
     
     stages {
@@ -92,8 +93,8 @@ pipeline {
             steps {
                 echo "Deployment tag: ${params.tag}";
                 sshagent(['ssh-agent']) {
-                    sh "scp -o StrictHostKeyChecking=no shop.tar.gz ${params.sshHost}:/var/www/spamgwozd.chickenkiller.com/tmp/${releaseTimestamp}.tar.gz"
-                    sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} \"bash -s\" < deploy.sh \"${releaseTimestamp}\""
+                    sh "scp -o StrictHostKeyChecking=no shop.tar.gz ${params.sshHost}:/var/www/${params.serverDir}/tmp/${releaseTimestamp}.tar.gz"
+                    sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} \"bash -s\" < deploy.sh \"${releaseTimestamp}\" \"${params.serverDir}\" "
                 }
             }
         }
