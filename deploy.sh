@@ -18,7 +18,7 @@ cd $SERVER_DIR
 
 ### create core symlink
 sudo rm -fr $SERVER_DIR/current
-ln -sf $SERVER_DIR/releases/$RELEASE current
+ln -sf $SERVER_DIR/releases/$RELEASE $SERVER_DIR/current
 
 ### restart services
 echo "sudo /etc/init.d/php8.1-fpm restart"
