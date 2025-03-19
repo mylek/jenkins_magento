@@ -3,8 +3,8 @@ SERVER_DIR=$2
 cd $SERVER_DIR
 
 ### create release dir and unzip
-mkdir releases/$RELEASE
-tar -xzf tmp/$RELEASE.tar.gz -C releases/$RELEASE --strip-components=1
+mkdir $SERVER_DIR/releases/$RELEASE
+tar -xzf $SERVER_DIR/tmp/$RELEASE.tar.gz -C releases/$RELEASE --strip-components=1
 
 ### create assets symlinks
 ln -sf $SERVER_DIR/share/var $SERVER_DIR/releases/$RELEASE/var
