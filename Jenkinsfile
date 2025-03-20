@@ -6,7 +6,7 @@ pipeline {
     }
     
     parameters {
-        string(defaultValue: "1.0.0-RC4", description: "Set git Tag", name: "tag")
+        string(defaultValue: "1.0.0-RC6", description: "Set git Tag", name: "tag")
         string(defaultValue: "https://github.com/mylek/magento245.git", description: "Repo URL", name: "repoURL")
         string(defaultValue: "https://github.com/mylek/m24_env.git", description: "Repo ENV URL", name: "repoEnvURL")
         string(defaultValue: "ubuntu@ec2-52-212-92-175.eu-west-1.compute.amazonaws.com", description: "Server SSH host", name: "sshHost")
@@ -40,6 +40,7 @@ pipeline {
                     phpContainer.inside {
                         sh "php -v"
                         sh "rm -rf ${rootDir}"
+                        sh "composer -v"
                         if (sh(script: "#!/bin/sh \n test -e ${rootDir}", returnStatus: true) == 1) {
                             sh "git clone ${params.repoURL} --branch=${params.tag} ${rootDir}"
                         }
