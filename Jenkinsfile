@@ -62,9 +62,6 @@ pipeline {
                             sh "git checkout -f ${TAG}"
                             sh "composer install --no-dev"
 
-                            sh "ls app/etc"
-                            sh "cat app/etc/config.php"
-
                             // Clear cache
                             //sh "rm -rf var/cache"
                             //sh "rm -rf var/page_cache/*"
