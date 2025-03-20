@@ -30,5 +30,6 @@ rm -rf $SERVER_DIR/tmp/$RELEASE.tar.gz
 cd $SERVER_DIR/releases
 find . -maxdepth 1 -mindepth 1 -type d -printf "%T+ %f\0" | sort -z | head -z -n -3 | cut -z -d' ' -f 2- | xargs -0 rm -rf
 cd $SERVER_DIR
+sudo chown -R www-data:www-data *
 
 exit
