@@ -53,6 +53,9 @@ pipeline {
         
         stage("Magento Setup") {
             steps {
+                sshagent(["${params.sshAgent}"]) {
+                    sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} sudo -u www-data pwd"
+                }
                 script {
                     phpContainer.inside {
                         //sh "rm -rf ${rootDir}"
@@ -112,7 +115,7 @@ pipeline {
         stage("Deployment") {
             steps {
                 echo "Deployment tag: ${params.tag}";
-                sshagent(['ssh-agent']) {
+                sshagent(["${params.sshAgent}"]) {
                     // upload zip file
                     sh "scp -o StrictHostKeyChecking=no shop.tar.gz ${params.sshHost}:${params.serverDir}/tmp/${releaseTimestamp}.tar.gz"
 
@@ -145,7 +148,7 @@ pipeline {
         
         stage("Clear up") {
             steps {
-                sshagent(['ssh-agent']) {
+                sshagent(["${params.sshAgent}"]) {
                     // remove archived files
                     sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} rm -rf ${params.serverDir}/tmp/*"
                 }
