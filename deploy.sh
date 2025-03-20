@@ -18,8 +18,9 @@ tar -xzf $SERVER_DIR/tmp/$RELEASE.tar.gz -C releases/$RELEASE --strip-components
 #sudo chown -R www-data:www-data *
 
 ### create core symlink
-sudo rm -fr $SERVER_DIR/current
-sudo ln -sf $SERVER_DIR/releases/$RELEASE $SERVER_DIR/current
+#sudo rm -fr $SERVER_DIR/current
+#sudo ln -sf $SERVER_DIR/releases/$RELEASE $SERVER_DIR/current
+echo "ln -sf $SERVER_DIR/releases/$RELEASE $SERVER_DIR/current"
 
 ### restart services
 #echo "sudo /etc/init.d/php8.1-fpm restart"
