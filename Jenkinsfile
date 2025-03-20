@@ -112,7 +112,7 @@ pipeline {
         stage("Deployment") {
             steps {
                 echo "Deployment tag: ${params.tag}";
-                sshagent(['sh-agent']) {
+                sshagent(['ssh-agent']) {
                     // upload zip file
                     sh "scp -o StrictHostKeyChecking=no shop.tar.gz ${params.sshHost}:${params.serverDir}/tmp/${releaseTimestamp}.tar.gz"
 
@@ -145,7 +145,7 @@ pipeline {
         
         stage("Clear up") {
             steps {
-                sshagent(['sh-agent']) {
+                sshagent(['ssh-agent']) {
                     // remove archived files
                     sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} rm -rf ${params.serverDir}/tmp/*"
                 }
