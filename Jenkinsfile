@@ -73,6 +73,7 @@ pipeline {
                             sh "php bin/magento setup:di:compile"
                             sh "php bin/magento setup:static-content:deploy -f"
                             sh "rm -rf var"
+                            sh "rm -rf pub/media"
                         }
                     }
                 }
