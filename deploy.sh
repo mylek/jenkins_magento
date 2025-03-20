@@ -20,7 +20,7 @@ cd $SERVER_DIR
 ### create core symlink
 sudo rm -fr $SERVER_DIR/current
 #ln -sf $SERVER_DIR/releases/$RELEASE $SERVER_DIR/current
-ln -sf releases/1742465826 current
+#ln -sf releases/1742465826 current
 echo "ln -sf $SERVER_DIR/releases/$RELEASE $SERVER_DIR/current"
 
 ### restart services
