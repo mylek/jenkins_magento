@@ -38,9 +38,7 @@ pipeline {
             steps {
                 script {
                     phpContainer.inside {
-                        sh "php -v"
                         sh "rm -rf ${rootDir}"
-                        sh "composer -v"
                         if (sh(script: "#!/bin/sh \n test -e ${rootDir}", returnStatus: true) == 1) {
                             sh "git clone ${params.repoURL} --branch=${params.tag} ${rootDir}"
                         }
