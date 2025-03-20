@@ -21,6 +21,22 @@ pipeline {
                         currentBuild.result = 'ABORTED'
                         error('Tag not set')
                     }
+                    if (params.repoURL == '') {
+                        currentBuild.result = 'ABORTED'
+                        error('Repo URL not set')
+                    }
+                    if (params.repoEnvURL == '') {
+                        currentBuild.result = 'ABORTED'
+                        error('Repo ENV URL not set')
+                    }
+                    if (params.sshHost == '') {
+                        currentBuild.result = 'ABORTED'
+                        error('SSH host not set')
+                    }
+                    if (params.serverDir == '') {
+                        currentBuild.result = 'ABORTED'
+                        error('Server dir not set')
+                    }
                 }
             }
         }
