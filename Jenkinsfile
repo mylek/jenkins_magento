@@ -53,9 +53,6 @@ pipeline {
         
         stage("Magento Setup") {
             steps {
-                sshagent(["${params.sshAgent}"]) {
-                    sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} sudo -u www-data pwd"
-                }
                 script {
                     phpContainer.inside {
                         //sh "rm -rf ${rootDir}"
