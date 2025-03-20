@@ -110,6 +110,7 @@ pipeline {
         }
         
         stage("Deployment") {
+            try {
             steps {
                 echo "Deployment tag: ${params.tag}";
                 sshagent(["${params.sshAgent}"]) {
@@ -140,6 +141,9 @@ pipeline {
                     // Deletes old releases folders leaving the last 3
                     sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} \"bash -s\" < remove_old_release.sh \"${params.serverDir}\" "
                 }
+            }
+            } catch (Exception e) {
+                currentBuild.result = 'FAILURE'
             }
         }
         
