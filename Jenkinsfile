@@ -103,12 +103,11 @@ pipeline {
                     sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} tar -xzf ${params.serverDir}/tmp/${releaseTimestamp}.tar.gz -C ${params.serverDir}/releases/${releaseTimestamp} --strip-components=1"
 
                     // create assets symlinks
-                    //ln -sf $SERVER_DIR/share/var/ $SERVER_DIR/releases/$RELEASE/
+                    //ln -sf $SERVER_DIR/share/var/ $SERVER_DIR/releases/$RELEASE/var
                     //ln -sf $SERVER_DIR/share/env.php $SERVER_DIR/releases/$RELEASE/app/etc/env.php
-                    //ln -sf $SERVER_DIR/share/pub/media $SERVER_DIR/releases/$RELEASE/pub/
+                    //ln -sf $SERVER_DIR/share/pub/media $SERVER_DIR/releases/$RELEASE/pub/media
 
                     // komendy magento
-                    //cd $SERVER_DIR/releases/$RELEASE
                     //echo "bin/magento setup:upgrade --keep-generated"
                     //cd $SERVER_DIR
                     //sudo chown -R www-data:www-data *
