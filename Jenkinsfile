@@ -124,7 +124,7 @@ pipeline {
                     sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} rm -rf ${params.serverDir}/tmp/${releaseTimestamp}.tar.gz"
 
                     // Deletes old releases folders leaving the last 3
-                    sh 'ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} cd ${params.serverDir}/releases || find . -maxdepth 1 -mindepth 1 -type d -printf "%T+ %f\0" | sort -z | head -z -n -3 | cut -z -d' ' -f 2- | xargs -0 rm -rf'
+                    sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} cd ${params.serverDir}/releases || find . -maxdepth 1 -mindepth 1 -type d -printf '%T+ %f\0' | sort -z | head -z -n -3 | cut -z -d' ' -f 2- | xargs -0 rm -rf"
                 }
             }
         }
