@@ -65,8 +65,8 @@ pipeline {
                             // Clear cache
                             //sh "rm -rf var/cache"
                             sh "rm -rf var"
-                            sh "rm -rf var/page_cache/*"
-                            sh "rm -rf var/preprocessed/*"
+                            //sh "rm -rf var/page_cache/*"
+                            //sh "rm -rf var/preprocessed/*"
                             sh "rm -rf pub/static/*"
                             sh "rm -rf generated/code/*"
 
