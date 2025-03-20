@@ -108,7 +108,7 @@ pipeline {
                     sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} ln -sf ${params.serverDir}/share/pub/media ${params.serverDir}/releases/${releaseTimestamp}/pub/media"
 
                     // komendy magento
-                    sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} ${params.serverDir}/bin/magento setup:upgrade --keep-generated"
+                    sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} ${params.serverDir}/releases/${releaseTimestamp}/bin/magento setup:upgrade --keep-generated"
                     sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} sudo chown -R www-data:www-data ${params.serverDir}/*"
                     
                     // create core symlink
