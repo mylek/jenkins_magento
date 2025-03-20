@@ -63,7 +63,7 @@ pipeline {
                             sh "composer install --no-dev"
 
                             sh "ls app/etc"
-                            sh "cat apt/etc/config.php"
+                            sh "cat app/etc/config.php"
 
                             // Clear cache
                             //sh "rm -rf var/cache"
