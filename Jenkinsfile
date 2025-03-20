@@ -94,10 +94,10 @@ pipeline {
             steps {
                 echo "Deployment tag: ${params.tag}";
                 sshagent(['ssh-agent']) {
+                    // upload zip file
                     sh "scp -o StrictHostKeyChecking=no shop.tar.gz ${params.sshHost}:${params.serverDir}/tmp/${releaseTimestamp}.tar.gz"
                     //sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} \"bash -s\" < deploy.sh \"${releaseTimestamp}\" \"${params.serverDir}\" "
 
-                    // test
                     // create release dir and unzip
                     sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} mkdir ${params.serverDir}/releases/${releaseTimestamp}"
                     sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} tar -xzf ${params.serverDir}/tmp/${releaseTimestamp}.tar.gz -C ${params.serverDir}/releases/${releaseTimestamp} --strip-components=1"
