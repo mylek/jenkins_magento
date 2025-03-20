@@ -133,7 +133,7 @@ pipeline {
             steps {
                 sshagent(['ssh-agent']) {
                     // remove archived files
-                    sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} rm -rf ${params.serverDir}/tmp/${releaseTimestamp}.tar.gz"
+                    sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} rm -rf ${params.serverDir}/tmp/*"
                 }
                 sh "rm -rf shop.tar.gz"
                 sh "rm -rf ${rootDir}"
