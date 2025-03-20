@@ -19,7 +19,7 @@ tar -xzf $SERVER_DIR/tmp/$RELEASE.tar.gz -C releases/$RELEASE --strip-components
 
 ### create core symlink
 #sudo rm -fr $SERVER_DIR/current
-#sudo ln -sf $SERVER_DIR/releases/$RELEASE $SERVER_DIR/current
+ln -sf $SERVER_DIR/releases/$RELEASE $SERVER_DIR/current
 echo "ln -sf $SERVER_DIR/releases/$RELEASE $SERVER_DIR/current"
 
 ### restart services
