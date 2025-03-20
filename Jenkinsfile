@@ -63,7 +63,8 @@ pipeline {
                             sh "composer install --no-dev"
 
                             // Clear cache
-                            sh "rm -rf var/cache"
+                            //sh "rm -rf var/cache"
+                            sh "rm -rf var"
                             sh "rm -rf var/page_cache/*"
                             sh "rm -rf var/preprocessed/*"
                             sh "rm -rf pub/static/*"
