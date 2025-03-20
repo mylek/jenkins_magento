@@ -54,48 +54,44 @@ pipeline {
         stage("Magento Setup") {
             steps {
                 script {
-                    try {
-                        phpContainer.inside {
-                            //sh "rm -rf ${rootDir}"
-                            if (sh(script: "#!/bin/sh \n test -e ${rootDir}", returnStatus: true) == 1) {
-                                sh "git clone ${params.repoURL} --branch=${params.tag} ${rootDir}"
-                            }
-        
-                            if (sh(script: "#!/bin/sh \n test -e env", returnStatus: true) == 1) {
-                                sh "git clone ${params.repoEnvURL} env"
-                            }
+                    phpContainer.inside {
+                        //sh "rm -rf ${rootDir}"
+                        if (sh(script: "#!/bin/sh \n test -e ${rootDir}", returnStatus: true) == 1) {
+                            sh "git clone ${params.repoURL} --branch=${params.tag} ${rootDir}"
+                        }
     
-                            // Remove env.php if exists
-                            if (sh(script: "#!/bin/sh \n test -e ${rootDir}/app/etc/env.php", returnStatus: true) == 0) {
-                                sh "rm -rf ${rootDir}/app/etc/env.php"
-                            }
-        
-                            if (sh(script: "#!/bin/sh \n test -e ${rootDir}/auth.json", returnStatus: true) == 0) {
-                                sh "rm -rf ${rootDir}/auth.json"
-                            }
-                            sh "cp env/auth.json ${rootDir}/auth.json"
-                            
-                            dir("${rootDir}") {
-                                // Git checkout
-                                sh "git fetch origin"
-                                sh "git checkout -f ${TAG}"
-                                sh "composer install --no-dev"
+                        if (sh(script: "#!/bin/sh \n test -e env", returnStatus: true) == 1) {
+                            sh "git clone ${params.repoEnvURL} env"
+                        }
+
+                        // Remove env.php if exists
+                        if (sh(script: "#!/bin/sh \n test -e ${rootDir}/app/etc/env.php", returnStatus: true) == 0) {
+                            sh "rm -rf ${rootDir}/app/etc/env.php"
+                        }
     
-                                // Clear cache
-                                //sh "rm -rf var/cache"
-                                //sh "rm -rf var/page_cache/*"
-                                //sh "rm -rf var/preprocessed/*"
-                                sh "rm -rf pub/static/*"
-                                sh "rm -rf generated/code/*"
-    
-                                // Compilate
-                                sh "php bin/magento setup:di:compile"
-                                sh "php bin/magento setup:static-content:deploy -f"
-                                sh "rm -rf var"
-                                sh "rm -rf pub/media"
-                            }
-                        } catch(error) {
-                            currentBuild.result = 'FAILURE'
+                        if (sh(script: "#!/bin/sh \n test -e ${rootDir}/auth.json", returnStatus: true) == 0) {
+                            sh "rm -rf ${rootDir}/auth.json"
+                        }
+                        sh "cp env/auth.json ${rootDir}/auth.json"
+                        
+                        dir("${rootDir}") {
+                            // Git checkout
+                            sh "git fetch origin"
+                            sh "git checkout -f ${TAG}"
+                            sh "composer install --no-dev"
+
+                            // Clear cache
+                            //sh "rm -rf var/cache"
+                            //sh "rm -rf var/page_cache/*"
+                            //sh "rm -rf var/preprocessed/*"
+                            sh "rm -rf pub/static/*"
+                            sh "rm -rf generated/code/*"
+
+                            // Compilate
+                            sh "php bin/magento setup:di:compile"
+                            sh "php bin/magento setup:static-content:deploy -f"
+                            sh "rm -rf var"
+                            sh "rm -rf pub/media"
                         }
                     }
                 }
@@ -115,34 +111,38 @@ pipeline {
         
         stage("Deployment") {
             steps {
-                echo "Deployment tag: ${params.tag}";
-                sshagent(["${params.sshAgent}"]) {
-                    // upload zip file
-                    sh "scp -o StrictHostKeyChecking=no shop.tar.gz ${params.sshHost}:${params.serverDir}/tmp/${releaseTimestamp}.tar.gz"
-
-                    // create release dir and unzip
-                    sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} sudo -u www-data mkdir ${params.serverDir}/releases/${releaseTimestamp}"
-                    sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} sudo -u www-data tar -xzf ${params.serverDir}/tmp/${releaseTimestamp}.tar.gz -C ${params.serverDir}/releases/${releaseTimestamp} --strip-components=1"
-
-                    // create assets symlinks
-                    sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} sudo -u www-data ln -sf ${params.serverDir}/share/var/ ${params.serverDir}/releases/${releaseTimestamp}"
-                    sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} sudo -u www-data ln -sf ${params.serverDir}/share/env.php ${params.serverDir}/releases/${releaseTimestamp}/app/etc/env.php"
-                    sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} sudo -u www-data ln -sf ${params.serverDir}/share/pub/media ${params.serverDir}/releases/${releaseTimestamp}/pub"
-
-                    // komendy magento
-                    sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} sudo -u www-data ${params.serverDir}/releases/${releaseTimestamp}/bin/magento setup:upgrade --keep-generated -n"
-                    //sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} sudo chown -R www-data:www-data ${params.serverDir}/releases/${releaseTimestamp}/*"
-                    
-                    // create core symlink
-                    sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} sudo rm -fr ${params.serverDir}/current"
-                    sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} sudo -u www-data ln -sf ${params.serverDir}/releases/${releaseTimestamp} ${params.serverDir}/current"
-                    //sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} sudo chown -R www-data:www-data ${params.serverDir}/current"
-
-                    // restart services
-                    sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} sudo /etc/init.d/php8.1-fpm restart"
-
-                    // Deletes old releases folders leaving the last 3
-                    sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} \"bash -s\" < remove_old_release.sh \"${params.serverDir}\" "
+                try {
+                    echo "Deployment tag: ${params.tag}";
+                    sshagent(["${params.sshAgent}"]) {
+                        // upload zip file
+                        sh "scp -o StrictHostKeyChecking=no shop.tar.gz ${params.sshHost}:${params.serverDir}/tmp/${releaseTimestamp}.tar.gz"
+    
+                        // create release dir and unzip
+                        sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} sudo -u www-data mkdir ${params.serverDir}/releases/${releaseTimestamp}"
+                        sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} sudo -u www-data tar -xzf ${params.serverDir}/tmp/${releaseTimestamp}.tar.gz -C ${params.serverDir}/releases/${releaseTimestamp} --strip-components=1"
+    
+                        // create assets symlinks
+                        sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} sudo -u www-data ln -sf ${params.serverDir}/share/var/ ${params.serverDir}/releases/${releaseTimestamp}"
+                        sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} sudo -u www-data ln -sf ${params.serverDir}/share/env.php ${params.serverDir}/releases/${releaseTimestamp}/app/etc/env.php"
+                        sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} sudo -u www-data ln -sf ${params.serverDir}/share/pub/media ${params.serverDir}/releases/${releaseTimestamp}/pub"
+    
+                        // komendy magento
+                        sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} sudo -u www-data ${params.serverDir}/releases/${releaseTimestamp}/bin/magento setup:upgrade --keep-generated -n"
+                        //sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} sudo chown -R www-data:www-data ${params.serverDir}/releases/${releaseTimestamp}/*"
+                        
+                        // create core symlink
+                        sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} sudo rm -fr ${params.serverDir}/current"
+                        sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} sudo -u www-data ln -sf ${params.serverDir}/releases/${releaseTimestamp} ${params.serverDir}/current"
+                        //sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} sudo chown -R www-data:www-data ${params.serverDir}/current"
+    
+                        // restart services
+                        sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} sudo /etc/init.d/php8.1-fpm restart"
+    
+                        // Deletes old releases folders leaving the last 3
+                        sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} \"bash -s\" < remove_old_release.sh \"${params.serverDir}\" "
+                    }
+                 } catch(error) {
+                    currentBuild.result = 'FAILURE'
                 }
             }
         }
