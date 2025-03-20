@@ -54,44 +54,48 @@ pipeline {
         stage("Magento Setup") {
             steps {
                 script {
-                    phpContainer.inside {
-                        //sh "rm -rf ${rootDir}"
-                        if (sh(script: "#!/bin/sh \n test -e ${rootDir}", returnStatus: true) == 1) {
-                            sh "git clone ${params.repoURL} --branch=${params.tag} ${rootDir}"
-                        }
+                    try {
+                        phpContainer.inside {
+                            //sh "rm -rf ${rootDir}"
+                            if (sh(script: "#!/bin/sh \n test -e ${rootDir}", returnStatus: true) == 1) {
+                                sh "git clone ${params.repoURL} --branch=${params.tag} ${rootDir}"
+                            }
+        
+                            if (sh(script: "#!/bin/sh \n test -e env", returnStatus: true) == 1) {
+                                sh "git clone ${params.repoEnvURL} env"
+                            }
     
-                        if (sh(script: "#!/bin/sh \n test -e env", returnStatus: true) == 1) {
-                            sh "git clone ${params.repoEnvURL} env"
-                        }
-
-                        // Remove env.php if exists
-                        if (sh(script: "#!/bin/sh \n test -e ${rootDir}/app/etc/env.php", returnStatus: true) == 0) {
-                            sh "rm -rf ${rootDir}/app/etc/env.php"
-                        }
+                            // Remove env.php if exists
+                            if (sh(script: "#!/bin/sh \n test -e ${rootDir}/app/etc/env.php", returnStatus: true) == 0) {
+                                sh "rm -rf ${rootDir}/app/etc/env.php"
+                            }
+        
+                            if (sh(script: "#!/bin/sh \n test -e ${rootDir}/auth.json", returnStatus: true) == 0) {
+                                sh "rm -rf ${rootDir}/auth.json"
+                            }
+                            sh "cp env/auth.json ${rootDir}/auth.json"
+                            
+                            dir("${rootDir}") {
+                                // Git checkout
+                                sh "git fetch origin"
+                                sh "git checkout -f ${TAG}"
+                                sh "composer install --no-dev"
     
-                        if (sh(script: "#!/bin/sh \n test -e ${rootDir}/auth.json", returnStatus: true) == 0) {
-                            sh "rm -rf ${rootDir}/auth.json"
-                        }
-                        sh "cp env/auth.json ${rootDir}/auth.json"
-                        
-                        dir("${rootDir}") {
-                            // Git checkout
-                            sh "git fetch origin"
-                            sh "git checkout -f ${TAG}"
-                            sh "composer install --no-dev"
-
-                            // Clear cache
-                            //sh "rm -rf var/cache"
-                            //sh "rm -rf var/page_cache/*"
-                            //sh "rm -rf var/preprocessed/*"
-                            sh "rm -rf pub/static/*"
-                            sh "rm -rf generated/code/*"
-
-                            // Compilate
-                            sh "php bin/magento setup:di:compile"
-                            sh "php bin/magento setup:static-content:deploy -f"
-                            sh "rm -rf var"
-                            sh "rm -rf pub/media"
+                                // Clear cache
+                                //sh "rm -rf var/cache"
+                                //sh "rm -rf var/page_cache/*"
+                                //sh "rm -rf var/preprocessed/*"
+                                sh "rm -rf pub/static/*"
+                                sh "rm -rf generated/code/*"
+    
+                                // Compilate
+                                sh "php bin/magento setup:di:compile"
+                                sh "php bin/magento setup:static-content:deploy -f"
+                                sh "rm -rf var"
+                                sh "rm -rf pub/media"
+                            }
+                        } catch(error) {
+                            currentBuild.result = 'FAILURE'
                         }
                     }
                 }
