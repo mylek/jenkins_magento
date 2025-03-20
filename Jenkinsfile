@@ -6,7 +6,7 @@ pipeline {
     }
     
     parameters {
-        string(defaultValue: "1.0.0-RC1", description: "Set git Tag", name: "tag")
+        string(defaultValue: "1.0.0-RC2", description: "Set git Tag", name: "tag")
         string(defaultValue: "https://github.com/mylek/magento245.git", description: "Repo URL", name: "repoURL")
         string(defaultValue: "https://github.com/mylek/m24_env.git", description: "Repo ENV URL", name: "repoEnvURL")
         string(defaultValue: "ubuntu@ec2-52-212-92-175.eu-west-1.compute.amazonaws.com", description: "Server SSH host", name: "sshHost")
@@ -61,6 +61,9 @@ pipeline {
                             sh "git fetch origin"
                             sh "git checkout -f ${TAG}"
                             sh "composer install --no-dev"
+
+                            sh "ls app/etc"
+                            sh "cat apt/etc/config.php"
 
                             // Clear cache
                             //sh "rm -rf var/cache"
