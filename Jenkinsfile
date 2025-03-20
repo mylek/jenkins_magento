@@ -103,9 +103,9 @@ pipeline {
                     sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} tar -xzf ${params.serverDir}/tmp/${releaseTimestamp}.tar.gz -C ${params.serverDir}/releases/${releaseTimestamp} --strip-components=1"
 
                     // create assets symlinks
-                    sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} ln -sf ${params.serverDir}/share/var/ ${params.serverDir}/releases/${releaseTimestamp}/var"
+                    sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} ln -sf ${params.serverDir}/share/var/ ${params.serverDir}/releases/${releaseTimestamp}"
                     sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} ln -sf ${params.serverDir}/share/env.php ${params.serverDir}/releases/${releaseTimestamp}/app/etc/env.php"
-                    sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} ln -sf ${params.serverDir}/share/pub/media ${params.serverDir}/releases/${releaseTimestamp}/pub/media"
+                    sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} ln -sf ${params.serverDir}/share/pub/media ${params.serverDir}/releases/${releaseTimestamp}/pub"
 
                     // komendy magento
                     //sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} ${params.serverDir}/releases/${releaseTimestamp}/bin/magento setup:upgrade --keep-generated"
