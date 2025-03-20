@@ -117,38 +117,34 @@ pipeline {
         
         stage("Deployment") {
             steps {
-                try {
-                    echo "Deployment tag: ${params.tag}";
-                    sshagent(["${params.sshAgent}"]) {
-                        // upload zip file
-                        sh "scp -o StrictHostKeyChecking=no shop.tar.gz ${params.sshHost}:${params.serverDir}/tmp/${releaseTimestamp}.tar.gz"
+                echo "Deployment tag: ${params.tag}";
+                sshagent(["${params.sshAgent}"]) {
+                    // upload zip file
+                    sh "scp -o StrictHostKeyChecking=no shop.tar.gz ${params.sshHost}:${params.serverDir}/tmp/${releaseTimestamp}.tar.gz"
     
-                        // create release dir and unzip
-                        sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} sudo -u www-data mkdir ${params.serverDir}/releases/${releaseTimestamp}"
-                        sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} sudo -u www-data tar -xzf ${params.serverDir}/tmp/${releaseTimestamp}.tar.gz -C ${params.serverDir}/releases/${releaseTimestamp} --strip-components=1"
+                    // create release dir and unzip
+                    sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} sudo -u www-data mkdir ${params.serverDir}/releases/${releaseTimestamp}"
+                    sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} sudo -u www-data tar -xzf ${params.serverDir}/tmp/${releaseTimestamp}.tar.gz -C ${params.serverDir}/releases/${releaseTimestamp} --strip-components=1"
     
-                        // create assets symlinks
-                        sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} sudo -u www-data ln -sf ${params.serverDir}/share/var/ ${params.serverDir}/releases/${releaseTimestamp}"
-                        sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} sudo -u www-data ln -sf ${params.serverDir}/share/env.php ${params.serverDir}/releases/${releaseTimestamp}/app/etc/env.php"
-                        sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} sudo -u www-data ln -sf ${params.serverDir}/share/pub/media ${params.serverDir}/releases/${releaseTimestamp}/pub"
+                    // create assets symlinks
+                    sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} sudo -u www-data ln -sf ${params.serverDir}/share/var/ ${params.serverDir}/releases/${releaseTimestamp}"
+                    sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} sudo -u www-data ln -sf ${params.serverDir}/share/env.php ${params.serverDir}/releases/${releaseTimestamp}/app/etc/env.php"
+                    sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} sudo -u www-data ln -sf ${params.serverDir}/share/pub/media ${params.serverDir}/releases/${releaseTimestamp}/pub"
     
-                        // komendy magento
-                        sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} sudo -u www-data ${params.serverDir}/releases/${releaseTimestamp}/bin/magento setup:upgrade --keep-generated -n"
-                        //sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} sudo chown -R www-data:www-data ${params.serverDir}/releases/${releaseTimestamp}/*"
-                        
-                        // create core symlink
-                        sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} sudo rm -fr ${params.serverDir}/current"
-                        sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} sudo -u www-data ln -sf ${params.serverDir}/releases/${releaseTimestamp} ${params.serverDir}/current"
-                        //sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} sudo chown -R www-data:www-data ${params.serverDir}/current"
+                    // komendy magento
+                    sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} sudo -u www-data ${params.serverDir}/releases/${releaseTimestamp}/bin/magento setup:upgrade --keep-generated -n"
+                    //sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} sudo chown -R www-data:www-data ${params.serverDir}/releases/${releaseTimestamp}/*"
+                    
+                    // create core symlink
+                    sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} sudo rm -fr ${params.serverDir}/current"
+                    sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} sudo -u www-data ln -sf ${params.serverDir}/releases/${releaseTimestamp} ${params.serverDir}/current"
+                    //sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} sudo chown -R www-data:www-data ${params.serverDir}/current"
     
-                        // restart services
-                        sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} sudo /etc/init.d/php8.1-fpm restart"
+                    // restart services
+                    sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} sudo /etc/init.d/php8.1-fpm restart"
     
-                        // Deletes old releases folders leaving the last 3
-                        sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} \"bash -s\" < remove_old_release.sh \"${params.serverDir}\" "
-                    }
-                 } catch(error) {
-                    currentBuild.result = 'FAILURE'
+                    // Deletes old releases folders leaving the last 3
+                    sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} \"bash -s\" < remove_old_release.sh \"${params.serverDir}\" "
                 }
             }
         }
