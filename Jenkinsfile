@@ -6,11 +6,12 @@ pipeline {
     }
     
     parameters {
-        string(defaultValue: "1.0.0-RC7", description: "Set git Tag", name: "tag")
+        string(defaultValue: "", description: "Set git Tag", name: "tag")
         string(defaultValue: "https://github.com/mylek/magento245.git", description: "Repo URL", name: "repoURL")
         string(defaultValue: "https://github.com/mylek/m24_env.git", description: "Repo ENV URL", name: "repoEnvURL")
         string(defaultValue: "ubuntu@ec2-52-212-92-175.eu-west-1.compute.amazonaws.com", description: "Server SSH host", name: "sshHost")
         string(defaultValue: "/var/www/spamgwozd.chickenkiller.com", description: "Server dir", name: "serverDir")
+        string(defaultValue: "ssh-agent", description: "SSH Agent", name: "sshAgent")
     }
     
     stages {
@@ -111,7 +112,7 @@ pipeline {
         stage("Deployment") {
             steps {
                 echo "Deployment tag: ${params.tag}";
-                sshagent(['ssh-agent']) {
+                sshagent([${params.sshAgent}]) {
                     // upload zip file
                     sh "scp -o StrictHostKeyChecking=no shop.tar.gz ${params.sshHost}:${params.serverDir}/tmp/${releaseTimestamp}.tar.gz"
 
@@ -144,7 +145,7 @@ pipeline {
         
         stage("Clear up") {
             steps {
-                sshagent(['ssh-agent']) {
+                sshagent(${params.sshAgent}) {
                     // remove archived files
                     sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} rm -rf ${params.serverDir}/tmp/*"
                 }
