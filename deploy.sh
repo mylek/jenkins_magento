@@ -12,24 +12,24 @@ tar -xzf $SERVER_DIR/tmp/$RELEASE.tar.gz -C releases/$RELEASE --strip-components
 #ln -sf $SERVER_DIR/share/pub/media $SERVER_DIR/releases/$RELEASE/pub/
 
 ### komendy magento
-cd $SERVER_DIR/releases/$RELEASE
-echo "bin/magento setup:upgrade --keep-generated"
-cd $SERVER_DIR
-sudo chown -R www-data:www-data *
+#cd $SERVER_DIR/releases/$RELEASE
+#echo "bin/magento setup:upgrade --keep-generated"
+#cd $SERVER_DIR
+#sudo chown -R www-data:www-data *
 
 ### create core symlink
-sudo rm -fr $SERVER_DIR/current
-sudo ln -sf $SERVER_DIR/releases/$RELEASE $SERVER_DIR/current
+#sudo rm -fr $SERVER_DIR/current
+#sudo ln -sf $SERVER_DIR/releases/$RELEASE $SERVER_DIR/current
 
 ### restart services
-echo "sudo /etc/init.d/php8.1-fpm restart"
+#echo "sudo /etc/init.d/php8.1-fpm restart"
 
 ### remove archived files
-rm -rf $SERVER_DIR/tmp/$RELEASE.tar.gz
+#rm -rf $SERVER_DIR/tmp/$RELEASE.tar.gz
 
 ### Deletes old releases folders leaving the last 3
-cd $SERVER_DIR/releases
-find . -maxdepth 1 -mindepth 1 -type d -printf "%T+ %f\0" | sort -z | head -z -n -3 | cut -z -d' ' -f 2- | xargs -0 rm -rf
-cd $SERVER_DIR
+#cd $SERVER_DIR/releases
+#find . -maxdepth 1 -mindepth 1 -type d -printf "%T+ %f\0" | sort -z | head -z -n -3 | cut -z -d' ' -f 2- | xargs -0 rm -rf
+#cd $SERVER_DIR
 
 exit
