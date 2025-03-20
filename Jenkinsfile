@@ -18,7 +18,7 @@ pipeline {
         stage("Check input") {
             steps {
                 script {
-                    if (${params.tag} == '') {
+                    if (params.tag == '') {
                         currentBuild.result = 'ABORTED'
                         error('Tag not set')
                     }
