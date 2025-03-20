@@ -14,13 +14,13 @@ tar -xzf $SERVER_DIR/tmp/$RELEASE.tar.gz -C releases/$RELEASE --strip-components
 ### komendy magento
 #cd $SERVER_DIR/releases/$RELEASE
 #echo "bin/magento setup:upgrade --keep-generated"
-#cd $SERVER_DIR
+cd $SERVER_DIR
 #sudo chown -R www-data:www-data *
 
 ### create core symlink
-#sudo rm -fr $SERVER_DIR/current
+sudo rm -fr $SERVER_DIR/current
 #ln -sf $SERVER_DIR/releases/$RELEASE $SERVER_DIR/current
-ln -sf /var/www/spamgwozd.chickenkiller.com/releases/1742464086 /var/www/spamgwozd.chickenkiller.com/current
+ln -sf releases/$RELEASE current
 echo "ln -sf $SERVER_DIR/releases/$RELEASE $SERVER_DIR/current"
 
 ### restart services
