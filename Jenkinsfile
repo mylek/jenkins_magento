@@ -94,12 +94,37 @@ pipeline {
             steps {
                 echo "Deployment tag: ${params.tag}";
                 sshagent(['ssh-agent']) {
-                    sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} pwd"
-                    //sh "scp -o StrictHostKeyChecking=no shop.tar.gz ${params.sshHost}:${params.serverDir}/tmp/${releaseTimestamp}.tar.gz"
+                    sh "scp -o StrictHostKeyChecking=no shop.tar.gz ${params.sshHost}:${params.serverDir}/tmp/${releaseTimestamp}.tar.gz"
                     //sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} \"bash -s\" < deploy.sh \"${releaseTimestamp}\" \"${params.serverDir}\" "
 
                     // test
-                    sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} ln -sf /var/www/spamgwozd.chickenkiller.com/releases/1742467139/ /var/www/spamgwozd.chickenkiller.com/current"
+                    // create release dir and unzip
+                    sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} mkdir ${params.serverDir}/releases/${releaseTimestamp}"
+                    sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} tar -xzf ${params.serverDir}/tmp/${releaseTimestamp}.tar.gz -C ${params.serverDir}/releases/${releaseTimestamp} --strip-components=1"
+
+                    // create assets symlinks
+                    //ln -sf $SERVER_DIR/share/var/ $SERVER_DIR/releases/$RELEASE/
+                    //ln -sf $SERVER_DIR/share/env.php $SERVER_DIR/releases/$RELEASE/app/etc/env.php
+                    //ln -sf $SERVER_DIR/share/pub/media $SERVER_DIR/releases/$RELEASE/pub/
+
+                    // komendy magento
+                    //cd $SERVER_DIR/releases/$RELEASE
+                    //echo "bin/magento setup:upgrade --keep-generated"
+                    //cd $SERVER_DIR
+                    //sudo chown -R www-data:www-data *
+                    
+                    // create core symlink
+                    sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} sudo rm -fr ${params.serverDir}/current"
+                    sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} ln -sf ${params.serverDir}/releases/${releaseTimestamp} ${params.serverDir}/current"
+
+                    // restart services
+                    // echo "sudo /etc/init.d/php8.1-fpm restart"
+
+                    // remove archived files
+                    sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} rm -rf ${params.serverDir}/tmp/${releaseTimestamp}.tar.gz"
+
+                    // Deletes old releases folders leaving the last 3
+                    sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} cd ${params.serverDir}/releases || find . -maxdepth 1 -mindepth 1 -type d -printf "%T+ %f\0" | sort -z | head -z -n -3 | cut -z -d' ' -f 2- | xargs -0 rm -rf"
                 }
             }
         }
