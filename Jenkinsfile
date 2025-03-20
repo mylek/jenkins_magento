@@ -103,21 +103,21 @@ pipeline {
                     sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} tar -xzf ${params.serverDir}/tmp/${releaseTimestamp}.tar.gz -C ${params.serverDir}/releases/${releaseTimestamp} --strip-components=1"
 
                     // create assets symlinks
-                    //ln -sf $SERVER_DIR/share/var/ $SERVER_DIR/releases/$RELEASE/var
-                    //ln -sf $SERVER_DIR/share/env.php $SERVER_DIR/releases/$RELEASE/app/etc/env.php
-                    //ln -sf $SERVER_DIR/share/pub/media $SERVER_DIR/releases/$RELEASE/pub/media
+                    sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} ln -sf ${params.serverDir}/share/var/ ${params.serverDir}/releases/${releaseTimestamp}/var"
+                    sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} ln -sf ${params.serverDir}/share/env.php ${params.serverDir}/releases/${releaseTimestamp}/app/etc/env.php"
+                    sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} ln -sf ${params.serverDir}/share/pub/media ${params.serverDir}/releases/${releaseTimestamp}/pub/media"
 
                     // komendy magento
-                    //echo "bin/magento setup:upgrade --keep-generated"
-                    //cd $SERVER_DIR
-                    //sudo chown -R www-data:www-data *
+                    sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} ${params.serverDir}/bin/magento setup:upgrade --keep-generated"
+                    sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} sudo chown -R www-data:www-data ${params.serverDir}/*"
                     
                     // create core symlink
                     sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} sudo rm -fr ${params.serverDir}/current"
                     sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} ln -sf ${params.serverDir}/releases/${releaseTimestamp} ${params.serverDir}/current"
+                    sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} sudo chown -R www-data:www-data ${params.serverDir}/current"
 
                     // restart services
-                    // echo "sudo /etc/init.d/php8.1-fpm restart"
+                    // sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} sudo /etc/init.d/php8.1-fpm restart"
 
                     // remove archived files
                     sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} rm -rf ${params.serverDir}/tmp/${releaseTimestamp}.tar.gz"
