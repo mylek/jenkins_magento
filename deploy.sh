@@ -7,7 +7,7 @@ mkdir $SERVER_DIR/releases/$RELEASE
 tar -xzf $SERVER_DIR/tmp/$RELEASE.tar.gz -C releases/$RELEASE --strip-components=1
 
 ### create assets symlinks
-ln -sf $SERVER_DIR/share/var $SERVER_DIR/releases/$RELEASE/var
+ln -sf $SERVER_DIR/share/var/ $SERVER_DIR/releases/$RELEASE/var/
 ln -sf $SERVER_DIR/share/env.php $SERVER_DIR/releases/$RELEASE/app/etc/env.php
 ln -sf $SERVER_DIR/share/pub/media $SERVER_DIR/releases/$RELEASE/pub/media
 
