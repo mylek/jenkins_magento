@@ -55,7 +55,7 @@ pipeline {
             steps {
                 script {
                     phpContainer.inside {
-                        sh "rm -rf ${rootDir}"
+                        //sh "rm -rf ${rootDir}"
                         if (sh(script: "#!/bin/sh \n test -e ${rootDir}", returnStatus: true) == 1) {
                             sh "git clone ${params.repoURL} --branch=${params.tag} ${rootDir}"
                         }
