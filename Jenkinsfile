@@ -119,9 +119,6 @@ pipeline {
                     // restart services
                     sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} sudo /etc/init.d/php8.1-fpm restart"
 
-                    // remove archived files
-                    sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} rm -rf ${params.serverDir}/tmp/${releaseTimestamp}.tar.gz"
-
                     // Deletes old releases folders leaving the last 3
                     sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} \"bash -s\" < remove_old_release.sh \"${params.serverDir}\" "
                 }
@@ -130,6 +127,10 @@ pipeline {
         
         stage("Clear up") {
             steps {
+                sshagent(['ssh-agent']) {
+                    // remove archived files
+                    sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} rm -rf ${params.serverDir}/tmp/${releaseTimestamp}.tar.gz"
+                }
                 sh "rm -rf shop.tar.gz"
                 sh "rm -rf ${rootDir}"
                 sh "rm -rf env"
