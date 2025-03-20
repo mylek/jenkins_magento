@@ -3,6 +3,12 @@ pipeline {
     
     environment {
         rootDir = "shop"
+        TAG = "${params.tag}"
+        REPO_URL = "${params.repoURL}"
+        REPO_ENV_URL = "${params.repoEnvURL}"
+        SSH_HOST = "${params.sshHost}"
+        SERVER_DIR = "${params.serverDir}"
+        SSH_AGENT = "${params.sshAgent}"
     }
     
     parameters {
@@ -18,7 +24,7 @@ pipeline {
         stage("Check input") {
             steps {
                 script {
-                    if (params.tag == '') {
+                    if ($TAG == '') {
                         currentBuild.result = 'ABORTED'
                         error('Tag not set')
                     }
