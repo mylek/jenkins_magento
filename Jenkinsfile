@@ -99,7 +99,7 @@ pipeline {
                     //sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} \"bash -s\" < deploy.sh \"${releaseTimestamp}\" \"${params.serverDir}\" "
 
                     // test
-                    //sh 'ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} "echo pwd"'
+                    sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} ln -sf /var/www/spamgwozd.chickenkiller.com/releases/1742467139/ /var/www/spamgwozd.chickenkiller.com/current"
                 }
             }
         }
