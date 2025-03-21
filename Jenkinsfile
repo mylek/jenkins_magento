@@ -28,7 +28,7 @@ pipeline {
         stage("Check input") {
             steps {
                 script {
-                    echo $TAG
+                    echo TAG
                     if (params.tag == '') {
                         currentBuild.result = 'ABORTED'
                         error('Tag not set')
