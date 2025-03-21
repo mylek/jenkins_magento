@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        rootDir = "shop"
+        ROOT_DIR = "shop"
     }
     
     parameters {
@@ -61,9 +61,9 @@ pipeline {
             steps {
                 script {
                     phpContainer.inside {
-                        //sh "rm -rf ${rootDir}"
-                        if (sh(script: "#!/bin/sh \n test -e ${rootDir}", returnStatus: true) == 1) {
-                            sh "git clone ${REPO_URL} --branch=${TAG} ${rootDir}"
+                        //sh "rm -rf ${ROOT_DIR}"
+                        if (sh(script: "#!/bin/sh \n test -e ${ROOT_DIR}", returnStatus: true) == 1) {
+                            sh "git clone ${REPO_URL} --branch=${TAG} ${ROOT_DIR}"
                         }
     
                         if (sh(script: "#!/bin/sh \n test -e env", returnStatus: true) == 1) {
@@ -71,16 +71,16 @@ pipeline {
                         }
 
                         // Remove env.php if exists
-                        if (sh(script: "#!/bin/sh \n test -e ${rootDir}/app/etc/env.php", returnStatus: true) == 0) {
-                            sh "rm -rf ${rootDir}/app/etc/env.php"
+                        if (sh(script: "#!/bin/sh \n test -e ${ROOT_DIR}/app/etc/env.php", returnStatus: true) == 0) {
+                            sh "rm -rf ${ROOT_DIR}/app/etc/env.php"
                         }
     
-                        if (sh(script: "#!/bin/sh \n test -e ${rootDir}/auth.json", returnStatus: true) == 0) {
-                            sh "rm -rf ${rootDir}/auth.json"
+                        if (sh(script: "#!/bin/sh \n test -e ${ROOT_DIR}/auth.json", returnStatus: true) == 0) {
+                            sh "rm -rf ${ROOT_DIR}/auth.json"
                         }
-                        sh "cp env/auth.json ${rootDir}/auth.json"
+                        sh "cp env/auth.json ${ROOT_DIR}/auth.json"
                         
-                        dir("${rootDir}") {
+                        dir("${ROOT_DIR}") {
                             // Git checkout
                             sh "git fetch origin"
                             sh "git checkout -f ${TAG}"
@@ -109,7 +109,7 @@ pipeline {
                 script {
                     phpContainer.inside {
                         // Archive store content
-                        sh "tar -czf shop.tar.gz ${rootDir}/*"
+                        sh "tar -czf shop.tar.gz ${ROOT_DIR}/*"
                     }
                 }
             }
@@ -160,7 +160,7 @@ pipeline {
                     sh "ssh -tt -o StrictHostKeyChecking=no ${SSH_HOST} rm -rf ${SERVER_DIR}/tmp/*"
                 }
                 sh "rm -rf shop.tar.gz"
-                sh "rm -rf ${rootDir}"
+                sh "rm -rf ${ROOT_DIR}"
                 sh "rm -rf env"
             }
         }
