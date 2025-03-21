@@ -11,7 +11,7 @@ pipeline {
     }
     environment {
         rootDir = "shop"
-        TAG = ${params.tag};
+        TAG = "${params.tag}";
     }
     
     stages {
