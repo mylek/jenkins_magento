@@ -1,5 +1,9 @@
 pipeline {
     agent any
+
+    environment {
+        rootDir = "shop"
+    }
     
     parameters {
         string(defaultValue: "1.0.0-RC7", description: "Set git Tag", name: "tag")
@@ -9,16 +13,22 @@ pipeline {
         string(defaultValue: "/var/www/spamgwozd.chickenkiller.com", description: "Server dir", name: "serverDir")
         string(defaultValue: "ssh-agent", description: "SSH Agent", name: "sshAgent")
     }
-    environment {
-        rootDir = "shop"
-        TAG = "${params.tag}";
+
+    stage("Init") {
+        steps {
+            script {
+                phpContainer = docker.build("magento")
+                releaseTimestamp = sh(script: "echo `date +%s`", returnStdout: true).trim()
+                TAG = "${params.tag}";
+            }
+        }
     }
     
     stages {
         stage("Check input") {
             steps {
                 script {
-                    echo ${TAG}
+                    echo $TAG
                     if (params.tag == '') {
                         currentBuild.result = 'ABORTED'
                         error('Tag not set')
@@ -39,15 +49,6 @@ pipeline {
                         currentBuild.result = 'ABORTED'
                         error('Server dir not set')
                     }
-                }
-            }
-        }
-        
-        stage("Init") {
-            steps {
-                script {
-                    phpContainer = docker.build("magento")
-                    releaseTimestamp = sh(script: "echo `date +%s`", returnStdout: true).trim()
                 }
             }
         }
