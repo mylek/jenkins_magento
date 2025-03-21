@@ -22,6 +22,10 @@ pipeline {
                     releaseTimestamp = sh(script: "echo `date +%s`", returnStdout: true).trim()
                     TAG = "${params.tag}"
                     REPO_URL = "${params.repoURL}"
+                    REPO_ENV_URL = "${params.repoEnvURL}"
+                    SSH_HOST = "${params.sshHost}"
+                    SERVER_DIR = "${params.serverDir}"
+                    SSH_AGENT = "${params.sshAgent}"
                 }
             }
         }
@@ -37,15 +41,15 @@ pipeline {
                         currentBuild.result = 'ABORTED'
                         error('Repo URL not set')
                     }
-                    if (params.repoEnvURL == '') {
+                    if (REPO_ENV_URL == '') {
                         currentBuild.result = 'ABORTED'
                         error('Repo ENV URL not set')
                     }
-                    if (params.sshHost == '') {
+                    if (SSH_HOST == '') {
                         currentBuild.result = 'ABORTED'
                         error('SSH host not set')
                     }
-                    if (params.serverDir == '') {
+                    if (SERVER_DIR == '') {
                         currentBuild.result = 'ABORTED'
                         error('Server dir not set')
                     }
@@ -59,11 +63,11 @@ pipeline {
                     phpContainer.inside {
                         //sh "rm -rf ${rootDir}"
                         if (sh(script: "#!/bin/sh \n test -e ${rootDir}", returnStatus: true) == 1) {
-                            sh "git clone ${params.repoURL} --branch=${TAG} ${rootDir}"
+                            sh "git clone ${REPO_URL} --branch=${TAG} ${rootDir}"
                         }
     
                         if (sh(script: "#!/bin/sh \n test -e env", returnStatus: true) == 1) {
-                            sh "git clone ${params.repoEnvURL} env"
+                            sh "git clone ${REPO_ENV_URL} env"
                         }
 
                         // Remove env.php if exists
@@ -116,31 +120,31 @@ pipeline {
                 script {
                     try {
                         echo "Deployment tag: ${params.tag}";
-                        sshagent(["${params.sshAgent}"]) {
+                        sshagent(["${SSH_AGENT}"]) {
                             // upload zip file
-                            sh "scp -o StrictHostKeyChecking=no shop.tar.gz ${params.sshHost}:${params.serverDir}/tmp/${releaseTimestamp}.tar.gz"
+                            sh "scp -o StrictHostKeyChecking=no shop.tar.gz ${SSH_HOST}:${SERVER_DIR}/tmp/${releaseTimestamp}.tar.gz"
             
                             // create release dir and unzip
-                            sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} sudo -u www-data mkdir ${params.serverDir}/releases/${releaseTimestamp}"
-                            sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} sudo -u www-data tar -xzf ${params.serverDir}/tmp/${releaseTimestamp}.tar.gz -C ${params.serverDir}/releases/${releaseTimestamp} --strip-components=1"
+                            sh "ssh -tt -o StrictHostKeyChecking=no ${SSH_HOST} sudo -u www-data mkdir ${SERVER_DIR}/releases/${releaseTimestamp}"
+                            sh "ssh -tt -o StrictHostKeyChecking=no ${SSH_HOST} sudo -u www-data tar -xzf ${SERVER_DIR}/tmp/${releaseTimestamp}.tar.gz -C ${SERVER_DIR}/releases/${releaseTimestamp} --strip-components=1"
             
                             // create assets symlinks
-                            sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} sudo -u www-data ln -sf ${params.serverDir}/share/var/ ${params.serverDir}/releases/${releaseTimestamp}"
-                            sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} sudo -u www-data ln -sf ${params.serverDir}/share/env.php ${params.serverDir}/releases/${releaseTimestamp}/app/etc/env.php"
-                            sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} sudo -u www-data ln -sf ${params.serverDir}/share/pub/media ${params.serverDir}/releases/${releaseTimestamp}/pub"
+                            sh "ssh -tt -o StrictHostKeyChecking=no ${SSH_HOST} sudo -u www-data ln -sf ${SERVER_DIR}/share/var/ ${SERVER_DIR}/releases/${releaseTimestamp}"
+                            sh "ssh -tt -o StrictHostKeyChecking=no ${SSH_HOST} sudo -u www-data ln -sf ${SERVER_DIR}/share/env.php ${SERVER_DIR}/releases/${releaseTimestamp}/app/etc/env.php"
+                            sh "ssh -tt -o StrictHostKeyChecking=no ${SSH_HOST} sudo -u www-data ln -sf ${SERVER_DIR}/share/pub/media ${SERVER_DIR}/releases/${releaseTimestamp}/pub"
             
                             // komendy magento
-                            sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} sudo -u www-data ${params.serverDir}/releases/${releaseTimestamp}/bin/magento setup:upgrade --keep-generated -n"
+                            sh "ssh -tt -o StrictHostKeyChecking=no ${SSH_HOST} sudo -u www-data ${SERVER_DIR}/releases/${releaseTimestamp}/bin/magento setup:upgrade --keep-generated -n"
                             
                             // create core symlink
-                            sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} sudo rm -fr ${params.serverDir}/current"
-                            sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} sudo -u www-data ln -sf ${params.serverDir}/releases/${releaseTimestamp} ${params.serverDir}/current"
+                            sh "ssh -tt -o StrictHostKeyChecking=no ${SSH_HOST} sudo rm -fr ${SERVER_DIR}/current"
+                            sh "ssh -tt -o StrictHostKeyChecking=no ${SSH_HOST} sudo -u www-data ln -sf ${SERVER_DIR}/releases/${releaseTimestamp} ${SERVER_DIR}/current"
             
                             // restart services
-                            sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} sudo /etc/init.d/php8.1-fpm restart"
+                            sh "ssh -tt -o StrictHostKeyChecking=no ${SSH_HOST} sudo /etc/init.d/php8.1-fpm restart"
             
                             // Deletes old releases folders leaving the last 3
-                            sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} \"bash -s\" < remove_old_release.sh \"${params.serverDir}\" "
+                            sh "ssh -tt -o StrictHostKeyChecking=no ${SSH_HOST} \"bash -s\" < remove_old_release.sh \"${SERVER_DIR}\" "
                         }
                     } catch (Exception e) {
                         currentBuild.result = 'FAILURE'
@@ -151,9 +155,9 @@ pipeline {
         
         stage("Clear up") {
             steps {
-                sshagent(["${params.sshAgent}"]) {
+                sshagent(["${SSH_AGENT}"]) {
                     // remove archived files
-                    sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} rm -rf ${params.serverDir}/tmp/*"
+                    sh "ssh -tt -o StrictHostKeyChecking=no ${SSH_HOST} rm -rf ${SERVER_DIR}/tmp/*"
                 }
                 sh "rm -rf shop.tar.gz"
                 sh "rm -rf ${rootDir}"
