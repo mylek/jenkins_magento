@@ -129,12 +129,10 @@ pipeline {
             
                             // komendy magento
                             sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} sudo -u www-data ${params.serverDir}/releases/${releaseTimestamp}/bin/magento setup:upgrade --keep-generated -n"
-                            //sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} sudo chown -R www-data:www-data ${params.serverDir}/releases/${releaseTimestamp}/*"
                             
                             // create core symlink
                             sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} sudo rm -fr ${params.serverDir}/current"
                             sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} sudo -u www-data ln -sf ${params.serverDir}/releases/${releaseTimestamp} ${params.serverDir}/current"
-                            //sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} sudo chown -R www-data:www-data ${params.serverDir}/current"
             
                             // restart services
                             sh "ssh -tt -o StrictHostKeyChecking=no ${params.sshHost} sudo /etc/init.d/php8.1-fpm restart"
