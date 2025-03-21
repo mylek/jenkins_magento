@@ -13,18 +13,18 @@ pipeline {
         string(defaultValue: "/var/www/spamgwozd.chickenkiller.com", description: "Server dir", name: "serverDir")
         string(defaultValue: "ssh-agent", description: "SSH Agent", name: "sshAgent")
     }
-
-    stage("Init") {
-        steps {
-            script {
-                phpContainer = docker.build("magento")
-                releaseTimestamp = sh(script: "echo `date +%s`", returnStdout: true).trim()
-                TAG = "${params.tag}";
-            }
-        }
-    }
     
     stages {
+        stage("Init") {
+        steps {
+                script {
+                    phpContainer = docker.build("magento")
+                    releaseTimestamp = sh(script: "echo `date +%s`", returnStdout: true).trim()
+                    TAG = "${params.tag}";
+                }
+            }
+        }
+        
         stage("Check input") {
             steps {
                 script {
