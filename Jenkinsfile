@@ -20,7 +20,8 @@ pipeline {
                 script {
                     phpContainer = docker.build("magento")
                     releaseTimestamp = sh(script: "echo `date +%s`", returnStdout: true).trim()
-                    TAG = "${params.tag}";
+                    TAG = "${params.tag}"
+                    REPO_URL = "${params.repoURL}"
                 }
             }
         }
@@ -28,12 +29,11 @@ pipeline {
         stage("Check input") {
             steps {
                 script {
-                    echo TAG
-                    if (params.tag == '') {
+                    if (TAG == '') {
                         currentBuild.result = 'ABORTED'
                         error('Tag not set')
                     }
-                    if (params.repoURL == '') {
+                    if (REPO_URL == '') {
                         currentBuild.result = 'ABORTED'
                         error('Repo URL not set')
                     }
@@ -59,7 +59,7 @@ pipeline {
                     phpContainer.inside {
                         //sh "rm -rf ${rootDir}"
                         if (sh(script: "#!/bin/sh \n test -e ${rootDir}", returnStatus: true) == 1) {
-                            sh "git clone ${params.repoURL} --branch=${params.tag} ${rootDir}"
+                            sh "git clone ${params.repoURL} --branch=${TAG} ${rootDir}"
                         }
     
                         if (sh(script: "#!/bin/sh \n test -e env", returnStatus: true) == 1) {
